@@ -256,6 +256,8 @@ class AnalyzeData:
         self.general_graphs.distribution_kdeplot(self.df["price"], "price", "density")
 
     def __get_covariance(self):
+        print("Generating: Covariance")
+
         output_result = OutputResult(self.output)
         output_result.title = "Get covariance"
         output_result.process(self.df["price"].cov(self.df["visit"]))
@@ -269,6 +271,8 @@ class AnalyzeData:
         self.general_graphs.count_lmplot(self.df, "price", "visit", "Price", "Visits")
 
     def __get_correlation(self):
+        print("Generating Graph: Correlation")
+
         self.general_graphs.title = "Correlation of Features"
         self.general_graphs.heat_map_corr(
             self.df.loc[
@@ -277,6 +281,8 @@ class AnalyzeData:
         )
 
     def __get_correlation_cleaned(self):
+        print("Generating Graph: Correlation Cleaned")
+
         le_drivetrain = LabelEncoder()
         le_fuel_type = LabelEncoder()
         le_model = LabelEncoder()
@@ -300,6 +306,8 @@ class AnalyzeData:
         self.df["make"] = le_make.inverse_transform(self.df["make"])
 
     def __get_facet_grid_models(self):
+        print("Generating Graph: Facet Grid")
+
         self.general_graphs.title = "Density make vs price"
         self.general_graphs.facet_grid(self.df[["make", "price"]], "make", "price")
 
@@ -330,6 +338,9 @@ class AnalyzeData:
         self.__get_model_car_by_year()
         self.__get_mean_price_model_car_by_year()
 
+        if self.normalization == OptionEnum.YES:
+            self.df = CleansingData(self.output, self.df, self.overall).normalize_data()
+
         self.__get_price_density("Before")
         self.df = CleansingData(self.output, self.df, self.overall).identify_outliers(
             self.unique_make
@@ -338,6 +349,7 @@ class AnalyzeData:
         self.__get_covariance()
         self.__get_correlation_cleaned()
         self.__get_facet_grid_models()
+
         del self.extraction_data
         del self.overall
 

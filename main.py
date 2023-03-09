@@ -38,7 +38,13 @@ def read_arguments():
     elif args.training and args.training.lower() in ["console", "c", "2"]:
         args.training = OutputTypeEnum.CONSOLE
 
-    if args.normalization and args.normalization.lower() in ["yes", "y", "1"]:
+    if args.normalization and args.normalization.lower() in [
+        "yes",
+        "true",
+        "t",
+        "y",
+        "1",
+    ]:
         args.normalization = OptionEnum.YES
     else:
         args.normalization = OptionEnum.NO
@@ -63,7 +69,7 @@ if __name__ == "__main__":
 
             print(PrintColor.PURPLE, "-" * 50)
 
-        if args.training:
+        if args.analyze and args.training:
             print(PrintColor.CYAN, "-" * 50)
             print(PrintColor.BOLD, PrintColor.CYAN, "TRAINING DATA:", PrintColor.END)
 

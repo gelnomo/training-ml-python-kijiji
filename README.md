@@ -87,6 +87,16 @@ Install libraries
 pip install -r requirements.txt
 ```
 
+Run the project
+
+analyze: console/file. Generate the summary in a file or console
+training: console/file. Generate the summary in a file or console, it's required analyze to use this command
+normalization: yes/no. Generate all analysis and training with a normalization data
+
+```bash
+python3 main.py --analyze console --training file --normalization no
+```
+
 For the realization of the extraction and transformation of data began by selecting the libraries that would be used in the process, within these are: Numpy, Matplotlib, Pandas, Skelearn, Scipy and seanborn.  To understand the data, the shape of the dataset is 51343, 28 and the Date column is imported as a datetime data type.
 As a first initial step, an analysis is performed to identify min, max, standard deviation, and quartiles values for each ordinal and categorical column. Some columns, such as price, year, and kilometers, are equivalent to the initial shape. The trim, title, drivetrain, fuel type, color, number of doors, and number of seats columns contain fewer values than the initial form. The average price is 37,198 for each car make. However, the minimum and maximum prices show some outliers that could affect the average.  There is also evidence of values of the type of Nan and Null that must be cleaned. 
 
@@ -96,59 +106,95 @@ The following graph shows the percentage of null in the dataset. It is visible t
 ![bar_plot_percentage_nulls_per_columns.png](reports%2Ffigures%2Fbar_plot_percentage_nulls_per_columns.png)
 
 The initial correlation is created to understand which fields are valuable for solving the problem definition (price). Initially, it is notable that year, parking assist, alloy wheels, and transmission have a bit of relevance. Nevertheless, the other columns are categorical. Those could be more accurate once they become to numerical. As a result, it is necessary cleaning the data.
+
 ![heat_map_corr_correlation_of_features.png](reports%2Ffigures%2Fheat_map_corr_correlation_of_features.png)
+
 Another correlation is created to identify after becoming some Categoricals fields into numerical how many relations there are between each other. Notably, year, Drivetrain, fueltype, and transmission have relevant values to predict car price.
+
 ![heat_map_corr_correlation_of_features_cleaned.png](reports%2Ffigures%2Fheat_map_corr_correlation_of_features_cleaned.png)
 
 ### Graph: Number of Ads by City
 This graph shows that the majority of the ads were published in Calgary, with 16,219 ads, in contrast with other cities.
+
 ![count_bar_plot_number_of_ads_by_city.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_city.png)
+
 ### Graph: Number of Ads by Year
 This graph shows that the majority of the ads were published in 2022, with 46,827 ads, in contrast with the previous year, with 1,689 ads
+
 ![count_bar_plot_number_of_ads_by_year.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_year.png)
+
 ### Graph: Number of Ads by Month
 This graph shows that the majority of the ads were published in August, with 20,779 ads, in contrast with the other months. As a hypothesis, it could be related to the Summer season.
+
 ![count_bar_plot_number_of_ads_by_month.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_month.png)
+
 ### Graph: Number of Visits by Month
 This graph shows that July and August are the great months in 3 years with more than 3,000,000 visits each month, in contrast with the other months.
+
 ![bar_plot_number_of_visits_by_month.png](reports%2Ffigures%2Fbar_plot_number_of_visits_by_month.png)
+
 ### Graph: Number of Visits by Month and Year
 This graph shows that 2022 increased the visits compared to the previous years. In addition, July and August are the highlight months, with more than 3,000,000 visits each month, in contrast with the other months. It is very related to the number of ads published with the visits in the summer season.
+
 ![line_plot_monthly_visits_by_year.png](reports%2Ffigures%2Fline_plot_monthly_visits_by_year.png)
+
 ### Graph: Number of Visits by Year (Make Car)
 This graph shows that Ford has been one of the more searched cars in the last two years.
+
 ![bar_plot_make_(visit)_by_year.png](reports%2Ffigures%2Fbar_plot_make_%28visit%29_by_year.png)
+
 ### Graph: Number of Kilometers by Year (Make Car)
 This graph shows that Saab has been one of the brands with more kilometers published on Kijiji in the last two years.
+
 ![bar_plot_make_(kilometers)_by_year.png](reports/figures/bar_plot_make_(kilometers)_by_year.png)
+
 ### Graph: Media Price by Year (Make Car)
 This graph shows that Lamborghini, Mclaren, and Rolls-Royce are more expensive brands published on Kijiji in the last two years.
+
 ![bar_plot_make_(mean_price)_by_year.png](reports%2Ffigures%2Fbar_plot_make_%28mean_price%29_by_year.png)
+
 ### Graph: Media Price by Year
 This graph shows that the price has increased in the last few years. Even though there is missing data (September to December) in 2022, it will exceed 2021.
+
 ![bar_plot_price_per_year.png](reports%2Ffigures%2Fbar_plot_price_per_year.png)
+
 ### Graph: Shared-of-Visit by Year
 This graph shows the distribution in the last years, where 2022 year got 82% of the visits
+
 ![count_pie_plot_share-of-visit_by_year.png](reports%2Ffigures%2Fcount_pie_plot_share-of-visit_by_year.png)
+
 ### Graph: Model Car by year Car
 This graph shows that the model 2022 is the most published on Kijiji, with 8,464 ads.
+
 ![count_bar_plot_model_car_by_year.png](reports%2Ffigures%2Fcount_bar_plot_model_car_by_year.png)
+
 ### Graph: Mean Price per model year
 This graph shows that the 1968 model is the most common mean-price car in recent years.
+
 ![bar_plot_mean_price_per_model_year.png](reports%2Ffigures%2Fbar_plot_mean_price_per_model_year.png)
+
 ### Identify Outliers
 In the next step, it is going to identify prices that seem to be errors with the Z score method.  The Z score method is used to determine how many standard deviations a data point is from the mean. Roughly 68%, 95%, and 99.7% of the data points fall within 1, 2, and 3 standard deviations from the mean, respectively. Data points with a Z score greater than 3 are considered outliers.
+
 ![distribution_kdeplot_before_price_density.png](reports%2Ffigures%2Fdistribution_kdeplot_before_price_density.png)
+
 As the last step of data preprocessing, all the branded cars were collected in different data sets stored in a dictionary to be processed one by one. Categorical fields were converted into numerical (fuel type, condition, model, city, transmission) and unnecessary fields such as visits, kilometers, c_year c_month c_month_name.	
+
 ![distribution_kdeplot_after_price_density.png](reports%2Ffigures%2Fdistribution_kdeplot_after_price_density.png)
+
 As a result of cleaning the outliers the price density changed. It is notable that a lot of prices are distributed between $100 to $100,000.
+
 ### Covariance
 - Slope is negative between visits vs. price.
 - A negative covariance reveals that there is an inverse relationship between the variables, that is, as one increases, the other tends to decrease.
 - If the ad price goes up, the number of visits will reduce.
+
 ![count_scatter_correlation_price.png](reports%2Ffigures%2Fcount_scatter_correlation_price.png)
+
 ![count_lmplot_correlation_price_per_year.png](reports%2Ffigures%2Fcount_lmplot_correlation_price_per_year.png)
+
 The price density by make car shows that some make cars, such as Eagle, Suzuki, Saab, and Daihatsu, their distribution tells that have a common price.
+
 ![facet_grid_density_make_vs_price.png](reports%2Ffigures%2Ffacet_grid_density_make_vs_price.png)
 
 ### Train/Test Data
@@ -164,17 +210,23 @@ The research is done to identify different models that solve the problem definit
 It was decided to use three regression algorithms to build the price prediction model. The reasons for the use of these algorithms are that they are techniques used for the prediction of continuous variables as is the current case of the price. The model was built using the Scikit-learn library in Python and the goal is to compare the accuracy of each model by making a comparison of the error of each in the prediction. From the research on the internet, as analyzed some real-life use cases, and from that, most of the price is predicted by using the linear regression and random forest algorithm for higher accuracy and less error. For boosting accuracy, the gradient boosting algorithm is used. (Zakariya, M., 2022)
 
 ### How the models work
+
 #### Linear Regression
 It is a statistical technique that seeks to find the linear relationship between a dependent variable and one or more independent variables. It assumes a linear relationship between the input and output variables and seeks to fit a line that best describes the relationship. Linear regression is often used when the relationship between the variables is linear, and the goal is to make predictions within the range of the data.
+
 #### Random Forest Regressor
 It is a supervised learning algorithm that builds a set of decision trees and aggregates their results to produce a final output. It creates a forest of decision trees by randomly selecting samples from the data and features to build each tree. Random forest is often used when the relationship between the variables is non-linear, and the goal is to make predictions over a broader range of data, including out-of-sample data.
+
 #### Gradient Boosting
 It is a machine learning algorithm that combines several weak models to create a strong model. The algorithm works by iteratively adding new models to the ensemble, each one correcting the errors made by the previous models.
+
 ### Evaluating the Best Result (MSE, MAE, R squared, etc.)
 Predicting the accurate value requires choosing the ideal model for each combination collected or compared. One way to identify the less risk is by validating the error generated by each model. Root mean square error (RMSE) is checked to recognize how far the data points are from the regression line. With a lower number in RMSE has an excellent performance.
 There are a lot of errors between each model; identify the percentage of the model used to predict the dataset. It was RFR (Random Forest Regressor) with a 50%.
+
 ### Analyzing the Best Result
 After comparing the real price vs. the price predicted by each model, it is shown that the price expected has similar behavior to the real ones, which means that the project had a good result; however, in the car models from 1940 to 1960, the data require more cleansing in order to improve the prediction.
+
 ![comparison_plot_rfr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_rfr_mean_price_vs_mean_price_predicted.png)
 ![comparison_plot_lr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_lr_mean_price_vs_mean_price_predicted.png)
 ![comparison_plot_gbr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_gbr_mean_price_vs_mean_price_predicted.png)

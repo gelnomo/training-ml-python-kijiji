@@ -81,6 +81,8 @@ class TrainingData:
         output_result.process(df_result_model)
 
     def __get_rfr_mean_price_predicted(self, df_result):
+        print("Generating Graph: RFR Mean price vs Mean price predicted")
+
         result = (
             df_result[df_result["model_predicted"] == "RFR"]
             .groupby(by="year", as_index=False)["price", "price_predicted"]
@@ -90,6 +92,8 @@ class TrainingData:
         self.general_graphs.comparison_plot(result, "year", "price", "price_predicted")
 
     def __get_lr_mean_price_predicted(self, df_result):
+        print("Generating Graph: LR Mean price vs Mean price predicted")
+
         result = (
             df_result[df_result["model_predicted"] == "LR"]
             .groupby(by="year", as_index=False)["price", "price_predicted"]
@@ -99,6 +103,8 @@ class TrainingData:
         self.general_graphs.comparison_plot(result, "year", "price", "price_predicted")
 
     def __get_gbr_mean_price_predicted(self, df_result):
+        print("Generating Graph: GBR Mean price vs Mean price predicted")
+
         result = (
             df_result[df_result["model_predicted"] == "GBR"]
             .groupby(by="year", as_index=False)["price", "price_predicted"]
@@ -108,6 +114,8 @@ class TrainingData:
         self.general_graphs.comparison_plot(result, "year", "price", "price_predicted")
 
     def __get_mean_price_predicted(self, df_result):
+        print("Generating Graph: Mean price vs Mean price predicted")
+
         result = df_result.groupby(by="year", as_index=False)[
             "price", "price_predicted"
         ].mean()
@@ -117,6 +125,7 @@ class TrainingData:
     def process(self):
         dict_df_transform = {}
         exclude_col = self.exclude_columns + self.columns_score
+        exclude_col_metric = ["make"] + self.columns_metrics + self.columns_score
 
         for item in self.unique_make:
             dict_df_transform[item] = self.df_transform[
@@ -167,6 +176,7 @@ class TrainingData:
             for index, row in tqdm(
                 dict_df_transform[item].iterrows(),
                 desc=f"{item}: {len(dict_df_transform[item])}",
+                leave=False,
             ):
                 predicted_lr = self.__predict(
                     lr, dict_df_transform[item][columns_names].loc[index]
@@ -184,10 +194,10 @@ class TrainingData:
                 if predicted_lr is not None:
                     dict_df_transform[item]["predicted lr"].loc[[index]] = predicted_lr
                     mae, mse, r2s, accuracy = get_metrics(
+                        lr,
                         dict_df_transform[item].loc[index],
                         predicted_lr,
-                        self.columns_metrics,
-                        self.columns_score,
+                        exclude_col_metric,
                     )
                     dict_df_transform[item]["predicted lr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted lr MSE"].loc[[index]] = mse
@@ -201,10 +211,10 @@ class TrainingData:
                         [index]
                     ] = predicted_gbr
                     mae, mse, r2s, accuracy = get_metrics(
+                        gbr,
                         dict_df_transform[item].loc[index],
                         predicted_gbr,
-                        self.columns_metrics,
-                        self.columns_score,
+                        exclude_col_metric,
                     )
                     dict_df_transform[item]["predicted gbr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted gbr MSE"].loc[[index]] = mse
@@ -218,10 +228,10 @@ class TrainingData:
                         [index]
                     ] = predicted_rfr
                     mae, mse, r2s, accuracy = get_metrics(
+                        rfr,
                         dict_df_transform[item].loc[index],
                         predicted_rfr,
-                        self.columns_metrics,
-                        self.columns_score,
+                        exclude_col_metric,
                     )
                     dict_df_transform[item]["predicted rfr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted rfr MSE"].loc[[index]] = mse
@@ -272,3 +282,5 @@ class TrainingData:
         self.__get_gbr_mean_price_predicted(df_result)
         self.__get_mean_price_predicted(df_result)
         storage_result(df_result)
+
+        del df_result

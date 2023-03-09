@@ -5,6 +5,7 @@ from sklearn.cluster import DBSCAN
 from features.output_result import OutputResult
 from features.enums import OutputTypeEnum
 from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
 
 
 class CleansingData:
@@ -73,6 +74,16 @@ class CleansingData:
         # Delete primary key value, because is not a relevant field to the prediction
 
         self.df.drop(columns=["AdID"], inplace=True)
+
+        return self.df
+
+    def normalize_data(self):
+        print("Generating: Normalization")
+
+        standard_normalization = StandardScaler()
+        self.df[["price", "Kilometers"]] = standard_normalization.fit_transform(
+            self.df[["price", "Kilometers"]]
+        )
 
         return self.df
 

@@ -45,7 +45,7 @@ def undummify(df, prefix_sep="_"):
 
 
 def storage_result(df_result):
-    database = "../result.sqlite"
+    database = "result.sqlite"
     conn = sqlite3.connect(database)
-    df_result.to_sql("result", conn)
+    df_result.to_sql("result", conn, if_exists="replace")
     conn.close()
