@@ -1,5 +1,4 @@
 import argparse
-import os
 import sys
 import warnings
 from features.utils import PrintColor
@@ -56,7 +55,7 @@ if __name__ == "__main__":
     try:
         # Ignore warning messages
         warnings.filterwarnings("ignore")
-        df, unique_make = None, None
+        df, unique_make, standard_normalization = None, None, None
 
         args = read_arguments()
         if args.analyze:
@@ -64,7 +63,7 @@ if __name__ == "__main__":
             print(PrintColor.BOLD, PrintColor.PURPLE, "ANALYZE DATA:", PrintColor.END)
 
             analyze_data = AnalyzeData(args.analyze, args.normalization)
-            df, unique_make = analyze_data.process()
+            df, unique_make, standard_normalization = analyze_data.process()
             del analyze_data
 
             print(PrintColor.PURPLE, "-" * 50)
@@ -74,7 +73,7 @@ if __name__ == "__main__":
             print(PrintColor.BOLD, PrintColor.CYAN, "TRAINING DATA:", PrintColor.END)
 
             training_data = TrainingData(df, unique_make, args.training)
-            training_data.process()
+            training_data.process(standard_normalization)
             del training_data
 
             print(PrintColor.CYAN, "-" * 50)

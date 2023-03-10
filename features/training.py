@@ -122,7 +122,7 @@ class TrainingData:
         self.general_graphs.title = "Mean price vs Mean price predicted"
         self.general_graphs.comparison_plot(result, "year", "price", "price_predicted")
 
-    def process(self):
+    def process(self, standard_normalization):
         dict_df_transform = {}
         exclude_col = self.exclude_columns + self.columns_score
         exclude_col_metric = ["make"] + self.columns_metrics + self.columns_score
@@ -281,6 +281,10 @@ class TrainingData:
         self.__get_rfr_mean_price_predicted(df_result)
         self.__get_gbr_mean_price_predicted(df_result)
         self.__get_mean_price_predicted(df_result)
-        storage_result(df_result)
 
+        if standard_normalization:
+            df_result["price"] = standard_normalization.inverse_transform(df_result[["price"]])
+            df_result["price_predicted"] = standard_normalization.inverse_transform(df_result[["price_predicted"]])
+
+        storage_result(df_result, "result")
         del df_result

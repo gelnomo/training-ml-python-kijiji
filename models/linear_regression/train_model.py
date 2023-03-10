@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 def train_linear_regression(data, target, exclude_columns, train_size, random_state):
     try:
         x = data.drop(columns=exclude_columns)
+        if len(x) == 0:
+            return None
+
         y = data[target]
         x_train, x_test, y_train, y_test = train_test_split(
             x, y, train_size=train_size, random_state=random_state

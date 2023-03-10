@@ -81,11 +81,11 @@ class CleansingData:
         print("Generating: Normalization")
 
         standard_normalization = StandardScaler()
-        self.df[["price", "Kilometers"]] = standard_normalization.fit_transform(
-            self.df[["price", "Kilometers"]]
+        self.df[["price"]] = standard_normalization.fit_transform(
+            self.df[["price"]]
         )
 
-        return self.df
+        return self.df, standard_normalization
 
     def identify_outliers(self, unique_make):
         for item in unique_make:

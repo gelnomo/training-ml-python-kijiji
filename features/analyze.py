@@ -14,6 +14,7 @@ class AnalyzeData:
         self.df = None
         self.overall = None
         self.unique_make = None
+        self.standard_normalization = None
         self.general_graphs = GeneralGraphs()
         self.extraction_data = ExtractionData()
         self.normalization = normalization
@@ -339,7 +340,7 @@ class AnalyzeData:
         self.__get_mean_price_model_car_by_year()
 
         if self.normalization == OptionEnum.YES:
-            self.df = CleansingData(self.output, self.df, self.overall).normalize_data()
+            self.df, self.standard_normalization = CleansingData(self.output, self.df, self.overall).normalize_data()
 
         self.__get_price_density("Before")
         self.df = CleansingData(self.output, self.df, self.overall).identify_outliers(
@@ -353,4 +354,4 @@ class AnalyzeData:
         del self.extraction_data
         del self.overall
 
-        return self.df, self.unique_make
+        return self.df, self.unique_make, self.standard_normalization
