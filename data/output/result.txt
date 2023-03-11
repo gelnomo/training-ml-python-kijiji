@@ -3892,3 +3892,441 @@ Get Percentage Use
 0             GBR  11059         26.194367
 1              LR   9847         23.323622
 2             RFR  21313         50.482010
+Get Initial Data
+[2023-03-10 20:36:49]
+         AdID                     city  latitude  longitude  mapAddress  \
+0  1623070279  Burnaby/New Westminster       NaN        NaN         NaN   
+1  1623097429     Delta/Surrey/Langley       NaN        NaN         NaN   
+2  1595531267     Delta/Surrey/Langley       NaN        NaN         NaN   
+3  1623215000     Delta/Surrey/Langley       NaN        NaN         NaN   
+4  1623286366     Delta/Surrey/Langley       NaN        NaN         NaN   
+
+                                               title  price saleby  \
+0                                  Suzuki Jimny 2006  14999  owner   
+1                                  Mustang cobra 99   26000  owner   
+2  2006 Nissan Frontier SE 4X4 - Local BC | No Ac...  13995  owner   
+3                                    1985 Chevy 1500   3300  owner   
+4                          2006 Volkswagen Jetta TDI   2700  owner   
+
+         make           model    Trim  year condition  Kilometers  \
+0      Suzuki           other     NaN  2006      used       37600   
+1        Ford         mustang  cobra   1999      used        5000   
+2      Nissan        frontier      SE  2006      used      227000   
+3   Chevrolet  ck_pickup_1500     NaN  1985      used      180000   
+4  volkswagen           jetta     NaN  2006      used      307000   
+
+           body Drivetrain fueltype   color                Date   visit  \
+0         wagon        4x4      gas   black 2022-06-27 20:16:56     NaN   
+1  coupe_2_door        rwd      NaN   black 2022-06-28 03:02:22  2026.0   
+2  pickup_truck        4x4      gas   black 2022-06-28 22:53:29   795.0   
+3  pickup_truck        4x4      gas    blue 2022-06-29 10:30:00  1020.0   
+4         sedan        fwd   diesel  silver 2022-06-29 14:28:28  1396.0   
+
+  No of door No of seats  Transmission  push button start  parking assist  \
+0          3           4           1.0                NaN             NaN   
+1          2           4           1.0                NaN             NaN   
+2          4           5           2.0                NaN             NaN   
+3          4           5           2.0                NaN             NaN   
+4          4           5           1.0                NaN             NaN   
+
+   sunroof  alloy wheels  VIN  
+0      NaN           NaN  NaN  
+1      NaN           NaN  NaN  
+2      NaN           1.0  NaN  
+3      NaN           NaN  NaN  
+4      NaN           NaN  NaN  
+Get Shape
+[2023-03-10 20:36:49]
+The shape of the dataset is: (51343, 28)
+Get Description
+[2023-03-10 20:36:50]
+                     count unique                            top   freq  \
+AdID                 51343  51342                       m4320099      2   
+city                 51343     12                        Calgary  17176   
+latitude               0.0    NaN                            NaN    NaN   
+longitude              0.0    NaN                            NaN    NaN   
+mapAddress             0.0    NaN                            NaN    NaN   
+title                51342  38931  2022 Ram 1500 Classic WARLOCK    179   
+price              51343.0    NaN                            NaN    NaN   
+saleby               51343      2                         dealer  38132   
+make                 51343     65                           Ford   6535   
+model                51343    741                          other   5518   
+Trim                 44143  16416                             SE    845   
+year               51343.0    NaN                            NaN    NaN   
+condition            51343      5                           used  41679   
+Kilometers         51343.0    NaN                            NaN    NaN   
+body                 51343      9                  suv_crossover  19609   
+Drivetrain           47557      5                            awd  15164   
+fueltype             47553      5                            gas  29733   
+color                48835     19                          black  12603   
+Date                 51343  44851            2022-07-19 19:04:01     12   
+visit              50541.0    NaN                            NaN    NaN   
+No of door           34665      6                              4  28880   
+No of seats          31829     16                              5  22131   
+Transmission       47339.0    NaN                            NaN    NaN   
+push button start  17088.0    NaN                            NaN    NaN   
+parking assist     12068.0    NaN                            NaN    NaN   
+sunroof            11710.0    NaN                            NaN    NaN   
+alloy wheels       18601.0    NaN                            NaN    NaN   
+VIN                    0.0    NaN                            NaN    NaN   
+
+                                first                last          mean  \
+AdID                              NaT                 NaT           NaN   
+city                              NaT                 NaT           NaN   
+latitude                          NaT                 NaT           NaN   
+longitude                         NaT                 NaT           NaN   
+mapAddress                        NaT                 NaT           NaN   
+title                             NaT                 NaT           NaN   
+price                             NaT                 NaT   37198.79224   
+saleby                            NaT                 NaT           NaN   
+make                              NaT                 NaT           NaN   
+model                             NaT                 NaT           NaN   
+Trim                              NaT                 NaT           NaN   
+year                              NaT                 NaT   2015.561459   
+condition                         NaT                 NaT           NaN   
+Kilometers                        NaT                 NaT  97731.696804   
+body                              NaT                 NaT           NaN   
+Drivetrain                        NaT                 NaT           NaN   
+fueltype                          NaT                 NaT           NaN   
+color                             NaT                 NaT           NaN   
+Date              2019-05-30 11:15:00 2022-08-27 12:44:05           NaN   
+visit                             NaT                 NaT    294.065333   
+No of door                        NaT                 NaT           NaN   
+No of seats                       NaT                 NaT           NaN   
+Transmission                      NaT                 NaT      1.929994   
+push button start                 NaT                 NaT      0.991983   
+parking assist                    NaT                 NaT      0.989228   
+sunroof                           NaT                 NaT      0.991119   
+alloy wheels                      NaT                 NaT      0.996237   
+VIN                               NaT                 NaT           NaN   
+
+                             std     min      25%      50%       75%  \
+AdID                         NaN     NaN      NaN      NaN       NaN   
+city                         NaN     NaN      NaN      NaN       NaN   
+latitude                     NaN     NaN      NaN      NaN       NaN   
+longitude                    NaN     NaN      NaN      NaN       NaN   
+mapAddress                   NaN     NaN      NaN      NaN       NaN   
+title                        NaN     NaN      NaN      NaN       NaN   
+price              442258.881411     0.0  13570.0  29295.0   49995.0   
+saleby                       NaN     NaN      NaN      NaN       NaN   
+make                         NaN     NaN      NaN      NaN       NaN   
+model                        NaN     NaN      NaN      NaN       NaN   
+Trim                         NaN     NaN      NaN      NaN       NaN   
+year                    6.877405  1900.0   2013.0   2017.0    2021.0   
+condition                    NaN     NaN      NaN      NaN       NaN   
+Kilometers         140004.001034     0.0  15168.5  75947.0  150000.0   
+body                         NaN     NaN      NaN      NaN       NaN   
+Drivetrain                   NaN     NaN      NaN      NaN       NaN   
+fueltype                     NaN     NaN      NaN      NaN       NaN   
+color                        NaN     NaN      NaN      NaN       NaN   
+Date                         NaN     NaN      NaN      NaN       NaN   
+visit                 858.379622     0.0     15.0     75.0     261.0   
+No of door                   NaN     NaN      NaN      NaN       NaN   
+No of seats                  NaN     NaN      NaN      NaN       NaN   
+Transmission             0.29573     0.0      2.0      2.0       2.0   
+push button start       0.089182     0.0      1.0      1.0       1.0   
+parking assist          0.103233     0.0      1.0      1.0       1.0   
+sunroof                 0.093825     0.0      1.0      1.0       1.0   
+alloy wheels            0.061231     0.0      1.0      1.0       1.0   
+VIN                          NaN     NaN      NaN      NaN       NaN   
+
+                          max  
+AdID                      NaN  
+city                      NaN  
+latitude                  NaN  
+longitude                 NaN  
+mapAddress                NaN  
+title                     NaN  
+price              99999999.0  
+saleby                    NaN  
+make                      NaN  
+model                     NaN  
+Trim                      NaN  
+year                   2023.0  
+condition                 NaN  
+Kilometers          9999999.0  
+body                      NaN  
+Drivetrain                NaN  
+fueltype                  NaN  
+color                     NaN  
+Date                      NaN  
+visit                 54064.0  
+No of door                NaN  
+No of seats               NaN  
+Transmission              3.0  
+push button start         1.0  
+parking assist            1.0  
+sunroof                   1.0  
+alloy wheels              1.0  
+VIN                       NaN  
+Get Overall
+[2023-03-10 20:36:50]
+None
+Identify The Duplicated Values
+[2023-03-10 20:36:54]
+          AdID         city  latitude  longitude  mapAddress  \
+7732  m4320099  North Shore       NaN        NaN         NaN   
+7733  m4320099  North Shore       NaN        NaN         NaN   
+
+                                               title  price  saleby      make  \
+7732  2022 Chrysler Pacifica TOURING All-wheel Drive  57430  dealer  Chrysler   
+7733  2022 Chrysler Pacifica TOURING All-wheel Drive  57430  dealer  Chrysler   
+
+         model                     Trim  year condition  Kilometers  \
+7732  pacifica  TOURING All-wheel Drive  2022       new           0   
+7733  pacifica  TOURING All-wheel Drive  2022       new           0   
+
+             body Drivetrain fueltype  color                Date  visit  \
+7732  minivan_van        awd      gas  black 2022-07-19 15:25:48    6.0   
+7733  minivan_van        awd      gas  black 2022-07-19 15:25:48    6.0   
+
+     No of door No of seats  Transmission  push button start  parking assist  \
+7732          4           7           2.0                NaN             NaN   
+7733          4           7           2.0                NaN             NaN   
+
+      sunroof  alloy wheels  VIN  
+7732      NaN           NaN  NaN  
+7733      NaN           NaN  NaN  
+Columns To Be Deleted
+[2023-03-10 20:36:54]
+['latitude' 'longitude' 'mapAddress' 'push button start' 'parking assist'
+ 'sunroof' 'alloy wheels' 'VIN']
+Columns To Be Deleted
+[2023-03-10 20:36:54]
+['title', 'saleby', 'Trim', 'body', 'color', 'No of door', 'No of seats']
+Identify Unique Make Cars Values
+[2023-03-10 20:36:54]
+['Suzuki' 'Ford' 'Nissan' 'Chevrolet' 'Volkswagen' 'Audi' 'Lexus'
+ 'Mitsubishi' 'Honda' 'Porsche' 'Dodge' 'Gmc' 'Mercedes Benz' 'Ferrari'
+ 'Lincoln' 'Bmw' 'Chrysler' 'Pontiac' 'Acura' 'Toyota' 'Hummer' 'Mazda'
+ 'Subaru' 'Land Rover' 'Cadillac' 'Plymouth' 'Saab' 'Other' 'Volvo'
+ 'Saturn' 'Hyundai' 'Daihatsu' 'Infiniti' 'Jeep' 'Mini' 'Alfa Romeo'
+ 'Bentley' 'Buick' 'Kia' 'Mercury' 'Isuzu' 'Smart' 'Ram' 'Jaguar' 'Scion'
+ 'Tesla' 'Fiat' 'Maserati' 'Mercedes Amg' 'Lamborghini' 'Genesis' 'Amc'
+ 'Datsun' 'Am General' 'International Harvester' 'Aston Martin' 'Maybach'
+ 'Oldsmobile' 'Lotus' 'Mclaren' 'Rolls Royce' 'Eagle' 'Geo' 'Mg']
+Get Covariance
+[2023-03-10 20:41:10]
+-4.20644354934939
+Get Initial Data
+[2023-03-10 20:45:57]
+         AdID                     city  latitude  longitude  mapAddress  \
+0  1623070279  Burnaby/New Westminster       NaN        NaN         NaN   
+1  1623097429     Delta/Surrey/Langley       NaN        NaN         NaN   
+2  1595531267     Delta/Surrey/Langley       NaN        NaN         NaN   
+3  1623215000     Delta/Surrey/Langley       NaN        NaN         NaN   
+4  1623286366     Delta/Surrey/Langley       NaN        NaN         NaN   
+
+                                               title  price saleby  \
+0                                  Suzuki Jimny 2006  14999  owner   
+1                                  Mustang cobra 99   26000  owner   
+2  2006 Nissan Frontier SE 4X4 - Local BC | No Ac...  13995  owner   
+3                                    1985 Chevy 1500   3300  owner   
+4                          2006 Volkswagen Jetta TDI   2700  owner   
+
+         make           model    Trim  year condition  Kilometers  \
+0      Suzuki           other     NaN  2006      used       37600   
+1        Ford         mustang  cobra   1999      used        5000   
+2      Nissan        frontier      SE  2006      used      227000   
+3   Chevrolet  ck_pickup_1500     NaN  1985      used      180000   
+4  volkswagen           jetta     NaN  2006      used      307000   
+
+           body Drivetrain fueltype   color                Date   visit  \
+0         wagon        4x4      gas   black 2022-06-27 20:16:56     NaN   
+1  coupe_2_door        rwd      NaN   black 2022-06-28 03:02:22  2026.0   
+2  pickup_truck        4x4      gas   black 2022-06-28 22:53:29   795.0   
+3  pickup_truck        4x4      gas    blue 2022-06-29 10:30:00  1020.0   
+4         sedan        fwd   diesel  silver 2022-06-29 14:28:28  1396.0   
+
+  No of door No of seats  Transmission  push button start  parking assist  \
+0          3           4           1.0                NaN             NaN   
+1          2           4           1.0                NaN             NaN   
+2          4           5           2.0                NaN             NaN   
+3          4           5           2.0                NaN             NaN   
+4          4           5           1.0                NaN             NaN   
+
+   sunroof  alloy wheels  VIN  
+0      NaN           NaN  NaN  
+1      NaN           NaN  NaN  
+2      NaN           1.0  NaN  
+3      NaN           NaN  NaN  
+4      NaN           NaN  NaN  
+Get Shape
+[2023-03-10 20:45:57]
+The shape of the dataset is: (51343, 28)
+Get Description
+[2023-03-10 20:45:57]
+                     count unique                            top   freq  \
+AdID                 51343  51342                       m4320099      2   
+city                 51343     12                        Calgary  17176   
+latitude               0.0    NaN                            NaN    NaN   
+longitude              0.0    NaN                            NaN    NaN   
+mapAddress             0.0    NaN                            NaN    NaN   
+title                51342  38931  2022 Ram 1500 Classic WARLOCK    179   
+price              51343.0    NaN                            NaN    NaN   
+saleby               51343      2                         dealer  38132   
+make                 51343     65                           Ford   6535   
+model                51343    741                          other   5518   
+Trim                 44143  16416                             SE    845   
+year               51343.0    NaN                            NaN    NaN   
+condition            51343      5                           used  41679   
+Kilometers         51343.0    NaN                            NaN    NaN   
+body                 51343      9                  suv_crossover  19609   
+Drivetrain           47557      5                            awd  15164   
+fueltype             47553      5                            gas  29733   
+color                48835     19                          black  12603   
+Date                 51343  44851            2022-07-19 19:04:01     12   
+visit              50541.0    NaN                            NaN    NaN   
+No of door           34665      6                              4  28880   
+No of seats          31829     16                              5  22131   
+Transmission       47339.0    NaN                            NaN    NaN   
+push button start  17088.0    NaN                            NaN    NaN   
+parking assist     12068.0    NaN                            NaN    NaN   
+sunroof            11710.0    NaN                            NaN    NaN   
+alloy wheels       18601.0    NaN                            NaN    NaN   
+VIN                    0.0    NaN                            NaN    NaN   
+
+                                first                last          mean  \
+AdID                              NaT                 NaT           NaN   
+city                              NaT                 NaT           NaN   
+latitude                          NaT                 NaT           NaN   
+longitude                         NaT                 NaT           NaN   
+mapAddress                        NaT                 NaT           NaN   
+title                             NaT                 NaT           NaN   
+price                             NaT                 NaT   37198.79224   
+saleby                            NaT                 NaT           NaN   
+make                              NaT                 NaT           NaN   
+model                             NaT                 NaT           NaN   
+Trim                              NaT                 NaT           NaN   
+year                              NaT                 NaT   2015.561459   
+condition                         NaT                 NaT           NaN   
+Kilometers                        NaT                 NaT  97731.696804   
+body                              NaT                 NaT           NaN   
+Drivetrain                        NaT                 NaT           NaN   
+fueltype                          NaT                 NaT           NaN   
+color                             NaT                 NaT           NaN   
+Date              2019-05-30 11:15:00 2022-08-27 12:44:05           NaN   
+visit                             NaT                 NaT    294.065333   
+No of door                        NaT                 NaT           NaN   
+No of seats                       NaT                 NaT           NaN   
+Transmission                      NaT                 NaT      1.929994   
+push button start                 NaT                 NaT      0.991983   
+parking assist                    NaT                 NaT      0.989228   
+sunroof                           NaT                 NaT      0.991119   
+alloy wheels                      NaT                 NaT      0.996237   
+VIN                               NaT                 NaT           NaN   
+
+                             std     min      25%      50%       75%  \
+AdID                         NaN     NaN      NaN      NaN       NaN   
+city                         NaN     NaN      NaN      NaN       NaN   
+latitude                     NaN     NaN      NaN      NaN       NaN   
+longitude                    NaN     NaN      NaN      NaN       NaN   
+mapAddress                   NaN     NaN      NaN      NaN       NaN   
+title                        NaN     NaN      NaN      NaN       NaN   
+price              442258.881411     0.0  13570.0  29295.0   49995.0   
+saleby                       NaN     NaN      NaN      NaN       NaN   
+make                         NaN     NaN      NaN      NaN       NaN   
+model                        NaN     NaN      NaN      NaN       NaN   
+Trim                         NaN     NaN      NaN      NaN       NaN   
+year                    6.877405  1900.0   2013.0   2017.0    2021.0   
+condition                    NaN     NaN      NaN      NaN       NaN   
+Kilometers         140004.001034     0.0  15168.5  75947.0  150000.0   
+body                         NaN     NaN      NaN      NaN       NaN   
+Drivetrain                   NaN     NaN      NaN      NaN       NaN   
+fueltype                     NaN     NaN      NaN      NaN       NaN   
+color                        NaN     NaN      NaN      NaN       NaN   
+Date                         NaN     NaN      NaN      NaN       NaN   
+visit                 858.379622     0.0     15.0     75.0     261.0   
+No of door                   NaN     NaN      NaN      NaN       NaN   
+No of seats                  NaN     NaN      NaN      NaN       NaN   
+Transmission             0.29573     0.0      2.0      2.0       2.0   
+push button start       0.089182     0.0      1.0      1.0       1.0   
+parking assist          0.103233     0.0      1.0      1.0       1.0   
+sunroof                 0.093825     0.0      1.0      1.0       1.0   
+alloy wheels            0.061231     0.0      1.0      1.0       1.0   
+VIN                          NaN     NaN      NaN      NaN       NaN   
+
+                          max  
+AdID                      NaN  
+city                      NaN  
+latitude                  NaN  
+longitude                 NaN  
+mapAddress                NaN  
+title                     NaN  
+price              99999999.0  
+saleby                    NaN  
+make                      NaN  
+model                     NaN  
+Trim                      NaN  
+year                   2023.0  
+condition                 NaN  
+Kilometers          9999999.0  
+body                      NaN  
+Drivetrain                NaN  
+fueltype                  NaN  
+color                     NaN  
+Date                      NaN  
+visit                 54064.0  
+No of door                NaN  
+No of seats               NaN  
+Transmission              3.0  
+push button start         1.0  
+parking assist            1.0  
+sunroof                   1.0  
+alloy wheels              1.0  
+VIN                       NaN  
+Get Overall
+[2023-03-10 20:45:57]
+None
+Identify The Duplicated Values
+[2023-03-10 20:46:01]
+          AdID         city  latitude  longitude  mapAddress  \
+7732  m4320099  North Shore       NaN        NaN         NaN   
+7733  m4320099  North Shore       NaN        NaN         NaN   
+
+                                               title  price  saleby      make  \
+7732  2022 Chrysler Pacifica TOURING All-wheel Drive  57430  dealer  Chrysler   
+7733  2022 Chrysler Pacifica TOURING All-wheel Drive  57430  dealer  Chrysler   
+
+         model                     Trim  year condition  Kilometers  \
+7732  pacifica  TOURING All-wheel Drive  2022       new           0   
+7733  pacifica  TOURING All-wheel Drive  2022       new           0   
+
+             body Drivetrain fueltype  color                Date  visit  \
+7732  minivan_van        awd      gas  black 2022-07-19 15:25:48    6.0   
+7733  minivan_van        awd      gas  black 2022-07-19 15:25:48    6.0   
+
+     No of door No of seats  Transmission  push button start  parking assist  \
+7732          4           7           2.0                NaN             NaN   
+7733          4           7           2.0                NaN             NaN   
+
+      sunroof  alloy wheels  VIN  
+7732      NaN           NaN  NaN  
+7733      NaN           NaN  NaN  
+Columns To Be Deleted
+[2023-03-10 20:46:01]
+['latitude' 'longitude' 'mapAddress' 'push button start' 'parking assist'
+ 'sunroof' 'alloy wheels' 'VIN']
+Columns To Be Deleted
+[2023-03-10 20:46:01]
+['title', 'saleby', 'Trim', 'body', 'color', 'No of door', 'No of seats']
+Identify Unique Make Cars Values
+[2023-03-10 20:46:01]
+['Suzuki' 'Ford' 'Nissan' 'Chevrolet' 'Volkswagen' 'Audi' 'Lexus'
+ 'Mitsubishi' 'Honda' 'Porsche' 'Dodge' 'Gmc' 'Mercedes Benz' 'Ferrari'
+ 'Lincoln' 'Bmw' 'Chrysler' 'Pontiac' 'Acura' 'Toyota' 'Hummer' 'Mazda'
+ 'Subaru' 'Land Rover' 'Cadillac' 'Plymouth' 'Saab' 'Other' 'Volvo'
+ 'Saturn' 'Hyundai' 'Daihatsu' 'Infiniti' 'Jeep' 'Mini' 'Alfa Romeo'
+ 'Bentley' 'Buick' 'Kia' 'Mercury' 'Isuzu' 'Smart' 'Ram' 'Jaguar' 'Scion'
+ 'Tesla' 'Fiat' 'Maserati' 'Mercedes Amg' 'Lamborghini' 'Genesis' 'Amc'
+ 'Datsun' 'Am General' 'International Harvester' 'Aston Martin' 'Maybach'
+ 'Oldsmobile' 'Lotus' 'Mclaren' 'Rolls Royce' 'Eagle' 'Geo' 'Mg']
+Get Covariance
+[2023-03-10 20:49:43]
+-1913239.6321004357
+Get Percentage Use
+[2023-03-10 21:08:52]
+  model_predicted   make  model_predicted%
+0             GBR  11067         26.213316
+1              LR   9828         23.278619
+2             RFR  21324         50.508065
