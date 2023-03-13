@@ -340,7 +340,9 @@ class AnalyzeData:
         self.__get_mean_price_model_car_by_year()
 
         if self.normalization == OptionEnum.YES:
-            self.df, self.standard_normalization = CleansingData(self.output, self.df, self.overall).normalize_data()
+            self.df, self.standard_normalization = CleansingData(
+                self.output, self.df, self.overall
+            ).normalize_data()
 
         self.__get_price_density("Before")
         self.df = CleansingData(self.output, self.df, self.overall).identify_outliers(

@@ -14,6 +14,6 @@ class ExtractionData:
         df = pd.read_csv(
             self.file, parse_dates=["Date"], date_parser=custom_date_parser
         )
-        #df = df[df["make"] == "Suzuki"]
+        # df = df[df["make"] == "Suzuki"]
         storage_result(df, "original")
         return df

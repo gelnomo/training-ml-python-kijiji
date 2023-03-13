@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from features.enums import OutputTypeEnum
+from features.enums import OutputTypeEnum, OptionEnum
 from features.utils import dummify, undummify, storage_result
 from tqdm import tqdm
 from features.output_result import OutputResult
@@ -51,11 +51,12 @@ class TrainingData:
 
     exclude_columns = ["price", "make"]
 
-    def __init__(self, df, unique_make, output: OutputTypeEnum):
+    def __init__(self, df, unique_make, output: OutputTypeEnum, is_joblib: OptionEnum):
         self.output = output
         self.df_transform = df.copy()
         self.unique_make = unique_make
         self.general_graphs = GeneralGraphs()
+        self.is_joblib = is_joblib
 
     def __del__(self):
         del self.general_graphs
@@ -155,6 +156,7 @@ class TrainingData:
                 exclude_col,
                 self.train_size,
                 self.random_state,
+                self.is_joblib,
             )
             gbr = train_gradient_boosting_regressor(
                 dict_df_transform[item],
@@ -162,6 +164,7 @@ class TrainingData:
                 exclude_col,
                 self.train_size,
                 self.random_state,
+                self.is_joblib,
             )
             rfr = train_random_forest_regressor(
                 dict_df_transform[item],
@@ -169,6 +172,7 @@ class TrainingData:
                 exclude_col,
                 self.train_size,
                 self.random_state,
+                self.is_joblib,
             )
 
             dict_df_transform[item][self.columns_metrics] = np.nan
@@ -283,8 +287,12 @@ class TrainingData:
         self.__get_mean_price_predicted(df_result)
 
         if standard_normalization:
-            df_result["price"] = standard_normalization.inverse_transform(df_result[["price"]])
-            df_result["price_predicted"] = standard_normalization.inverse_transform(df_result[["price_predicted"]])
+            df_result["price"] = standard_normalization.inverse_transform(
+                df_result[["price"]]
+            )
+            df_result["price_predicted"] = standard_normalization.inverse_transform(
+                df_result[["price_predicted"]]
+            )
 
         storage_result(df_result, "result")
         del df_result

@@ -1553,7 +1553,7 @@
       <Position>1</Position>
     </column>
     <column id="539" parent="505" name="price">
-      <DasType>REAL|0s</DasType>
+      <DasType>INTEGER|0s</DasType>
       <Position>2</Position>
     </column>
     <column id="540" parent="505" name="make">

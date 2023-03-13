@@ -24,7 +24,12 @@ def read_arguments():
         type=str,
         help="Normalization (yes/no)",
     )
-
+    parser.add_argument(
+        "--joblib",
+        dest="is_joblib",
+        type=str,
+        help="Normalization (yes/no)",
+    )
     args = parser.parse_args()
 
     if args.analyze and args.analyze.lower() in ["file", "f", "1"]:
@@ -47,6 +52,17 @@ def read_arguments():
         args.normalization = OptionEnum.YES
     else:
         args.normalization = OptionEnum.NO
+
+    if args.is_joblib and args.is_joblib.lower() in [
+        "yes",
+        "true",
+        "t",
+        "y",
+        "1",
+    ]:
+        args.is_joblib = OptionEnum.YES
+    else:
+        args.is_joblib = OptionEnum.NO
 
     return args
 
@@ -72,7 +88,7 @@ if __name__ == "__main__":
             print(PrintColor.CYAN, "-" * 50)
             print(PrintColor.BOLD, PrintColor.CYAN, "TRAINING DATA:", PrintColor.END)
 
-            training_data = TrainingData(df, unique_make, args.training)
+            training_data = TrainingData(df, unique_make, args.training, args.is_joblib)
             training_data.process(standard_normalization)
             del training_data
 

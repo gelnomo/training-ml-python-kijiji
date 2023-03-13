@@ -81,9 +81,7 @@ class CleansingData:
         print("Generating: Normalization")
 
         standard_normalization = StandardScaler()
-        self.df[["price"]] = standard_normalization.fit_transform(
-            self.df[["price"]]
-        )
+        self.df[["price"]] = standard_normalization.fit_transform(self.df[["price"]])
 
         return self.df, standard_normalization
 
