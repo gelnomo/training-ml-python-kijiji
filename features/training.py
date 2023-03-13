@@ -33,17 +33,14 @@ class TrainingData:
         "predicted train size",
         "predicted random state",
         "predicted lr",
-        "predicted lr accuracy",
         "predicted lr MAE",
         "predicted lr MSE",
         "predicted lr R2S",
         "predicted gbr",
-        "predicted gbr accuracy",
         "predicted gbr MAE",
         "predicted gbr MSE",
         "predicted gbr R2S",
         "predicted rfr",
-        "predicted rfr accuracy",
         "predicted rfr MAE",
         "predicted rfr MSE",
         "predicted rfr R2S",
@@ -51,12 +48,14 @@ class TrainingData:
 
     exclude_columns = ["price", "make"]
 
-    def __init__(self, df, unique_make, output: OutputTypeEnum, is_joblib: OptionEnum):
+    def __init__(
+        self, df, unique_make, output: OutputTypeEnum, storage_model: OptionEnum
+    ):
         self.output = output
         self.df_transform = df.copy()
         self.unique_make = unique_make
         self.general_graphs = GeneralGraphs()
-        self.is_joblib = is_joblib
+        self.storage_model = storage_model
 
     def __del__(self):
         del self.general_graphs
@@ -150,30 +149,45 @@ class TrainingData:
                 .columns.values
             )
             dict_df_transform[item][[self.columns_score]] = np.nan
-            lr = train_linear_regression(
+
+            lr, train_score, test_score = train_linear_regression(
                 dict_df_transform[item],
                 "price",
                 exclude_col,
                 self.train_size,
                 self.random_state,
-                self.is_joblib,
+                self.storage_model,
             )
-            gbr = train_gradient_boosting_regressor(
+            if train_score:
+                dict_df_transform[item]["lr score train"] = train_score
+            if test_score:
+                dict_df_transform[item]["lr score test"] = test_score
+
+            gbr, train_score, test_score = train_gradient_boosting_regressor(
                 dict_df_transform[item],
                 "price",
                 exclude_col,
                 self.train_size,
                 self.random_state,
-                self.is_joblib,
+                self.storage_model,
             )
-            rfr = train_random_forest_regressor(
+            if train_score:
+                dict_df_transform[item]["gbr score train"] = train_score
+            if test_score:
+                dict_df_transform[item]["gbr score test"] = test_score
+
+            rfr, train_score, test_score = train_random_forest_regressor(
                 dict_df_transform[item],
                 "price",
                 exclude_col,
                 self.train_size,
                 self.random_state,
-                self.is_joblib,
+                self.storage_model,
             )
+            if train_score:
+                dict_df_transform[item]["rfr score train"] = train_score
+            if test_score:
+                dict_df_transform[item]["rfr score test"] = test_score
 
             dict_df_transform[item][self.columns_metrics] = np.nan
 
@@ -197,8 +211,8 @@ class TrainingData:
 
                 if predicted_lr is not None:
                     dict_df_transform[item]["predicted lr"].loc[[index]] = predicted_lr
-                    mae, mse, r2s, accuracy = get_metrics(
-                        lr,
+                    mae, mse, r2s = get_metrics(
+                        "price",
                         dict_df_transform[item].loc[index],
                         predicted_lr,
                         exclude_col_metric,
@@ -206,16 +220,13 @@ class TrainingData:
                     dict_df_transform[item]["predicted lr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted lr MSE"].loc[[index]] = mse
                     dict_df_transform[item]["predicted lr R2S"].loc[[index]] = r2s
-                    dict_df_transform[item]["predicted lr accuracy"].loc[
-                        [index]
-                    ] = accuracy
 
                 if predicted_gbr is not None:
                     dict_df_transform[item]["predicted gbr"].loc[
                         [index]
                     ] = predicted_gbr
-                    mae, mse, r2s, accuracy = get_metrics(
-                        gbr,
+                    mae, mse, r2s = get_metrics(
+                        "price",
                         dict_df_transform[item].loc[index],
                         predicted_gbr,
                         exclude_col_metric,
@@ -223,16 +234,13 @@ class TrainingData:
                     dict_df_transform[item]["predicted gbr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted gbr MSE"].loc[[index]] = mse
                     dict_df_transform[item]["predicted gbr R2S"].loc[[index]] = r2s
-                    dict_df_transform[item]["predicted gbr accuracy"].loc[
-                        [index]
-                    ] = accuracy
 
                 if predicted_rfr is not None:
                     dict_df_transform[item]["predicted rfr"].loc[
                         [index]
                     ] = predicted_rfr
-                    mae, mse, r2s, accuracy = get_metrics(
-                        rfr,
+                    mae, mse, r2s = get_metrics(
+                        "price",
                         dict_df_transform[item].loc[index],
                         predicted_rfr,
                         exclude_col_metric,
@@ -240,9 +248,6 @@ class TrainingData:
                     dict_df_transform[item]["predicted rfr MAE"].loc[[index]] = mae
                     dict_df_transform[item]["predicted rfr MSE"].loc[[index]] = mse
                     dict_df_transform[item]["predicted rfr R2S"].loc[[index]] = r2s
-                    dict_df_transform[item]["predicted rfr accuracy"].loc[
-                        [index]
-                    ] = accuracy
 
             del lr
             del gbr

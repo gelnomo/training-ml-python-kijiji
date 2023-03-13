@@ -5,19 +5,23 @@ import datetime
 
 class OutputResult:
     def __init__(self, output_type: OutputTypeEnum):
+        # Initialize the output result with the output type and default file path.
         self._title = None
         self.output_type = output_type
         self.file = "data/output/result.txt"
 
     @property
     def title(self):
+        # Get the current title of the output result.
         return self._title
 
     @title.setter
     def title(self, new_title):
+        # Set the title of the output result.
         self._title = new_title
 
     def process(self, content):
+        # Process the given content with the current output type and title, if any.
         now = datetime.datetime.now()
         now = now.strftime("%Y-%m-%d %H:%M:%S")
 

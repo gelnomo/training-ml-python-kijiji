@@ -10,24 +10,31 @@ from features.training import TrainingData
 def read_arguments():
     parser = argparse.ArgumentParser(description="Predict Kijiji Car Price")
     parser.add_argument(
-        "--analyze", dest="analyze", type=str, help="Generating results (File/Console)"
+        "--analyze",
+        dest="analyze",
+        type=str,
+        help="Generating results (File/Console)",
+        choices=["file", "f", "1", "console", "c", "2"],
     )
     parser.add_argument(
         "--training",
         dest="training",
         type=str,
+        choices=["file", "f", "1", "console", "c", "2"],
         help="Generating results (File/Console)",
     )
     parser.add_argument(
         "--normalization",
         dest="normalization",
         type=str,
+        choices=["yes", "true", "t", "y", "1", "no", "false", "f", "n", "0"],
         help="Normalization (yes/no)",
     )
     parser.add_argument(
-        "--joblib",
-        dest="is_joblib",
+        "--storage_model",
+        dest="storage_model",
         type=str,
+        choices=["yes", "true", "t", "y", "1", "no", "false", "f", "n", "0"],
         help="Normalization (yes/no)",
     )
     args = parser.parse_args()
@@ -53,16 +60,16 @@ def read_arguments():
     else:
         args.normalization = OptionEnum.NO
 
-    if args.is_joblib and args.is_joblib.lower() in [
+    if args.storage_model and args.storage_model.lower() in [
         "yes",
         "true",
         "t",
         "y",
         "1",
     ]:
-        args.is_joblib = OptionEnum.YES
+        args.storage_model = OptionEnum.YES
     else:
-        args.is_joblib = OptionEnum.NO
+        args.storage_model = OptionEnum.NO
 
     return args
 
@@ -88,11 +95,17 @@ if __name__ == "__main__":
             print(PrintColor.CYAN, "-" * 50)
             print(PrintColor.BOLD, PrintColor.CYAN, "TRAINING DATA:", PrintColor.END)
 
-            training_data = TrainingData(df, unique_make, args.training, args.is_joblib)
+            training_data = TrainingData(
+                df, unique_make, args.training, args.storage_model
+            )
             training_data.process(standard_normalization)
             del training_data
 
             print(PrintColor.CYAN, "-" * 50)
+
+        del df
+        del unique_make
+        del standard_normalization
 
         print(
             PrintColor.GREEN, PrintColor.BOLD, "All done!", PrintColor.END, "\U0001F64C"

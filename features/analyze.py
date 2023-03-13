@@ -1,4 +1,6 @@
+import random
 import pandas as pd
+from typing import List
 from features.extraction import ExtractionData
 from features.output_result import OutputResult
 from features.enums import OutputTypeEnum, OptionEnum
@@ -9,6 +11,23 @@ from sklearn.preprocessing import LabelEncoder
 
 
 class AnalyzeData:
+    """A class for analyzing and visualizing data"""
+
+    MONTHS: List[str] = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+
     def __init__(self, output: OutputTypeEnum, normalization: OptionEnum):
         self.output = output
         self.df = None
@@ -18,20 +37,6 @@ class AnalyzeData:
         self.general_graphs = GeneralGraphs()
         self.extraction_data = ExtractionData()
         self.normalization = normalization
-        self.MONTHS = [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-        ]
         pd.set_option("display.max_columns", None)
 
     def __del__(self):
@@ -39,7 +44,9 @@ class AnalyzeData:
         del self.unique_make
         del self.general_graphs
 
-    def __get_overall(self):
+    def __get_overall(self) -> None:
+        """Calculate overall dataset statistics"""
+
         self.overall = pd.DataFrame(
             {
                 "Count": self.df.count(),
@@ -55,7 +62,9 @@ class AnalyzeData:
             }
         )
 
-    def __get_basic_info(self):
+    def __get_basic_info(self) -> None:
+        """Get basic information about the data."""
+
         print("Generating basic info")
         self.df = self.extraction_data.process()
         output_result = OutputResult(self.output)
@@ -69,12 +78,14 @@ class AnalyzeData:
         output_result.title = "Get overall"
         output_result.process(self.overall)
 
-    def __get_nulls(self):
+    def __get_nulls(self) -> None:
+        """Get nulls columns from the data."""
+
         print("Generating graph nulls")
         self.general_graphs.title = "Quantity Nulls per Column"
         self.general_graphs.heatmap_nulls(self.df)
 
-    def __get_nulls_percentages(self):
+    def __get_nulls_percentages(self) -> None:
         print("Generating graph nulls percentages")
         df_graph = round((self.df.isnull().sum() * 100 / len(self.df)), 2)
         self.general_graphs.title = "Percentage Nulls per Columns"
@@ -84,30 +95,30 @@ class AnalyzeData:
             df_graph.index, df_graph.values, "Columns", "Percentage"
         )
 
-    def __get_correlation(self):
+    def __get_correlation(self) -> None:
         print("Generating correlation graph")
         self.general_graphs.title = "Correlation of Features"
         self.general_graphs.heat_map_corr(self.df.corr())
 
-    def __get_number_ads_by_city(self):
+    def __get_number_ads_by_city(self) -> None:
         print("Generating Graph: Number of Ads by City")
         self.general_graphs.title = "Number of Ads by City"
         self.general_graphs.x_rotation = 90
         self.general_graphs.count_bar_plot(self.df["city"], "City", "Count")
 
-    def __get_number_ads_by_year(self):
+    def __get_number_ads_by_year(self) -> None:
         print("Generating Graph: Number of Ads by Year")
         self.general_graphs.title = "Number of Ads by Year"
         self.general_graphs.count_bar_plot(self.df["c_year"], "Year", "Count")
 
-    def __get_number_ads_by_month(self):
+    def __get_number_ads_by_month(self) -> None:
         print("Generating Graph: Number of Ads by Month")
         self.general_graphs.title = "Number of Ads by Month"
         self.general_graphs.count_bar_plot(
             self.df["c_month_name"], "Month", "Count", self.MONTHS
         )
 
-    def __get_number_of_visits_by_month(self):
+    def __get_number_of_visits_by_month(self) -> None:
         print("Generating Graph: Number of Visits by Month")
 
         df_graph = self.df.groupby(by=["c_month_name"], as_index=False)["visit"].sum()
@@ -125,7 +136,7 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_number_of_visits_by_month_year(self):
+    def __get_number_of_visits_by_month_year(self) -> None:
         print("Generating Graph: Number of Visits by Month and Year")
 
         # Create a data frame to summarize the visits to year and month
@@ -142,7 +153,7 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_number_of_visits_by_year_make_car(self):
+    def __get_number_of_visits_by_year_make_car(self) -> None:
         print("Generating Graph: Number of Visits by Year (Make Car)")
 
         # Create a data frame to summarize the visits to year and month
@@ -160,7 +171,7 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_number_of_kilometers_by_year_make_car(self):
+    def __get_number_of_kilometers_by_year_make_car(self) -> None:
         print("Generating Graph: Number of Kilometers by Year (Make Car)")
 
         df_graph = self.df[["Kilometers", "c_year", "make"]]
@@ -184,7 +195,7 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_media_price_by_year_make_car(self):
+    def __get_media_price_by_year_make_car(self) -> None:
         print("Generating Graph: Media Price by Year (Make Car)")
 
         df_graph = self.df[["price", "c_year", "make"]]
@@ -202,7 +213,7 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_media_price_by_year(self):
+    def __get_media_price_by_year(self) -> None:
         print("Generating Graph: Media Price by Year")
 
         df_graph = self.df[["price", "c_year"]]
@@ -215,24 +226,36 @@ class AnalyzeData:
 
         del df_graph
 
-    def __get_shared_of_visit_by_year(self):
+    def __get_shared_of_visit_by_year(self) -> None:
         print("Generating Graph: Shared-of-Visit by Year")
 
         df_graph = self.df[["visit", "c_year"]].groupby("c_year").sum()
+        n_explote = len(self.df["c_year"].unique())
+
+        explote = []
+        list_colors = []
+
+        r = lambda: random.randint(0, 255)
+        [explote.append(0.1 if n == 0 else 0) for n in range(n_explote)]
+        [
+            list_colors.append("#%02X%02X%02X" % (r(), r(), r()))
+            for i in range(n_explote)
+        ]
+
         total_visits = df_graph.sum()
 
         self.general_graphs.title = "Share-of-Visit by year"
         self.general_graphs.count_pie_plot(
             df_graph,
             "visit",
-            (0, 0, 0.1),
-            ["#ff9999", "#66b3ff", "#ffcc99"],
+            tuple(explote),
+            list_colors,
             f'TOTAL:\n {"{:,}".format(total_visits[0])}',
         )
 
         del df_graph
 
-    def __get_model_car_by_year(self):
+    def __get_model_car_by_year(self) -> None:
         print("Generating Graph: Model Car by year Car")
 
         self.general_graphs.title = "Model Car by year"
@@ -241,7 +264,7 @@ class AnalyzeData:
         self.general_graphs.bar_rotation = 90
         self.general_graphs.count_bar_plot(self.df["year"], "Year", "Count")
 
-    def __get_mean_price_model_car_by_year(self):
+    def __get_mean_price_model_car_by_year(self) -> None:
         print("Generating Graph: Mean Price per model year")
 
         self.general_graphs.title = "Mean Price per model year"
@@ -250,13 +273,13 @@ class AnalyzeData:
         self.general_graphs.bar_rotation = 90
         self.general_graphs.bar_plot(self.df["year"], self.df["price"], "Year", "Count")
 
-    def __get_price_density(self, subtitle):
+    def __get_price_density(self, subtitle) -> None:
         print(f"Generating Graph: {subtitle} Price density")
 
         self.general_graphs.title = f"{subtitle} Price density"
         self.general_graphs.distribution_kdeplot(self.df["price"], "price", "density")
 
-    def __get_covariance(self):
+    def __get_covariance(self) -> None:
         print("Generating: Covariance")
 
         output_result = OutputResult(self.output)
@@ -271,7 +294,7 @@ class AnalyzeData:
         self.general_graphs.column_huge_name = "c_year"
         self.general_graphs.count_lmplot(self.df, "price", "visit", "Price", "Visits")
 
-    def __get_correlation(self):
+    def __get_correlation(self) -> None:
         print("Generating Graph: Correlation")
 
         self.general_graphs.title = "Correlation of Features"
@@ -281,7 +304,7 @@ class AnalyzeData:
             ].corr()
         )
 
-    def __get_correlation_cleaned(self):
+    def __get_correlation_cleaned(self) -> None:
         print("Generating Graph: Correlation Cleaned")
 
         le_drivetrain = LabelEncoder()
@@ -306,7 +329,7 @@ class AnalyzeData:
         self.df["model"] = le_model.inverse_transform(self.df["model"])
         self.df["make"] = le_make.inverse_transform(self.df["make"])
 
-    def __get_facet_grid_models(self):
+    def __get_facet_grid_models(self) -> None:
         print("Generating Graph: Facet Grid")
 
         self.general_graphs.title = "Density make vs price"
