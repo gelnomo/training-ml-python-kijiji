@@ -1,52 +1,56 @@
 import argparse
 import sys
 import warnings
-from features.utils import PrintColor
-from features.enums import OutputTypeEnum, OptionEnum
-from features.analyze import AnalyzeData
-from features.training import TrainingData
+from modules.enums import OutputTypeEnum, OptionEnum, PrintColorEnum
+from modules.analyze import AnalyzeData
+from modules.training import TrainingData
+from typing import List
 
 
-def read_arguments():
+def read_arguments() -> List:
+    """
+    Read all arguments from console
+    :return: List of arguments
+    """
     parser = argparse.ArgumentParser(description="Predict Kijiji Car Price")
     parser.add_argument(
         "--analyze",
         dest="analyze",
         type=str,
         help="Generating results (File/Console)",
-        choices=["file", "f", "1", "console", "c", "2"],
+        choices=["file", "f", "console", "c"],
     )
     parser.add_argument(
         "--training",
         dest="training",
         type=str,
-        choices=["file", "f", "1", "console", "c", "2"],
+        choices=["file", "f", "console", "c"],
         help="Generating results (File/Console)",
     )
     parser.add_argument(
         "--normalization",
         dest="normalization",
         type=str,
-        choices=["yes", "true", "t", "y", "1", "no", "false", "f", "n", "0"],
+        choices=["yes", "true", "t", "y", "no", "false", "f", "n"],
         help="Normalization (yes/no)",
     )
     parser.add_argument(
         "--storage_model",
         dest="storage_model",
         type=str,
-        choices=["yes", "true", "t", "y", "1", "no", "false", "f", "n", "0"],
+        choices=["yes", "true", "t", "y", "no", "false", "f", "n"],
         help="Normalization (yes/no)",
     )
     args = parser.parse_args()
 
-    if args.analyze and args.analyze.lower() in ["file", "f", "1"]:
+    if args.analyze and args.analyze.lower() in ["file", "f"]:
         args.analyze = OutputTypeEnum.FILE
-    elif args.analyze and args.analyze.lower() in ["console", "c", "2"]:
+    elif args.analyze and args.analyze.lower() in ["console", "c"]:
         args.analyze = OutputTypeEnum.CONSOLE
 
-    if args.training and args.training.lower() in ["file", "f", "1"]:
+    if args.training and args.training.lower() in ["file", "f"]:
         args.training = OutputTypeEnum.FILE
-    elif args.training and args.training.lower() in ["console", "c", "2"]:
+    elif args.training and args.training.lower() in ["console", "c"]:
         args.training = OutputTypeEnum.CONSOLE
 
     if args.normalization and args.normalization.lower() in [
@@ -54,7 +58,6 @@ def read_arguments():
         "true",
         "t",
         "y",
-        "1",
     ]:
         args.normalization = OptionEnum.YES
     else:
@@ -65,7 +68,6 @@ def read_arguments():
         "true",
         "t",
         "y",
-        "1",
     ]:
         args.storage_model = OptionEnum.YES
     else:
@@ -78,46 +80,68 @@ if __name__ == "__main__":
     try:
         # Ignore warning messages
         warnings.filterwarnings("ignore")
-        df, unique_make, standard_normalization = None, None, None
+        df, unique_cities, standard_normalization = None, None, None
 
         args = read_arguments()
         if args.analyze:
-            print(PrintColor.PURPLE, "-" * 50)
-            print(PrintColor.BOLD, PrintColor.PURPLE, "ANALYZE DATA:", PrintColor.END)
+            print(PrintColorEnum.PURPLE, "-" * 50)
+            print(
+                PrintColorEnum.BOLD,
+                PrintColorEnum.PURPLE,
+                "ANALYZE DATA:",
+                PrintColorEnum.END,
+            )
 
             analyze_data = AnalyzeData(args.analyze, args.normalization)
-            df, unique_make, standard_normalization = analyze_data.process()
+            df, unique_cities, standard_normalization = analyze_data.process()
             del analyze_data
 
-            print(PrintColor.PURPLE, "-" * 50)
+            print(PrintColorEnum.PURPLE, "-" * 50)
 
         if args.analyze and args.training:
-            print(PrintColor.CYAN, "-" * 50)
-            print(PrintColor.BOLD, PrintColor.CYAN, "TRAINING DATA:", PrintColor.END)
+            print(PrintColorEnum.CYAN, "-" * 50)
+            print(
+                PrintColorEnum.BOLD,
+                PrintColorEnum.CYAN,
+                "TRAINING DATA:",
+                PrintColorEnum.END,
+            )
 
             training_data = TrainingData(
-                df, unique_make, args.training, args.storage_model
+                df, unique_cities, args.training, args.storage_model
             )
             training_data.process(standard_normalization)
             del training_data
 
-            print(PrintColor.CYAN, "-" * 50)
+            print(PrintColorEnum.CYAN, "-" * 50)
 
         del df
-        del unique_make
+        del unique_cities
         del standard_normalization
 
         print(
-            PrintColor.GREEN, PrintColor.BOLD, "All done!", PrintColor.END, "\U0001F64C"
+            PrintColorEnum.GREEN,
+            PrintColorEnum.BOLD,
+            "All done!",
+            PrintColorEnum.END,
+            "\U0001F64C",
         )
     except Exception as ex:
-        print(PrintColor.RED, PrintColor.BOLD, "Error!!", "\U0001F525", PrintColor.END)
+        print(
+            PrintColorEnum.RED,
+            PrintColorEnum.BOLD,
+            "Error!!",
+            "\U0001F525",
+            PrintColorEnum.END,
+        )
 
         exception_type, exception_object, exception_traceback = sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_number = exception_traceback.tb_lineno
 
-        print("\tDescription: ", PrintColor.RED, ex, PrintColor.END)
-        print("\tException type: ", PrintColor.RED, exception_type, PrintColor.END)
-        print("\tFile name: ", PrintColor.RED, filename, PrintColor.END)
-        print("\tLine number: ", PrintColor.RED, line_number, PrintColor.END)
+        print("\tDescription: ", PrintColorEnum.RED, ex, PrintColorEnum.END)
+        print(
+            "\tException type: ", PrintColorEnum.RED, exception_type, PrintColorEnum.END
+        )
+        print("\tFile name: ", PrintColorEnum.RED, filename, PrintColorEnum.END)
+        print("\tLine number: ", PrintColorEnum.RED, line_number, PrintColorEnum.END)

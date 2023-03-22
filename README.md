@@ -21,7 +21,7 @@ The global connection to the internet has become an essential part of our daily 
 ## Business Case Evaluation <a class="anchor" id="1"></a>
 
 ### Problem definition
-Kijiji company requires creating a product to predict the car price depending on the data recollected. The product is focused as a tool to suggest to the client the price during the ad publication.
+Kijiji company requires predict car visits depending on the data recollected.
 
 [Back to Table of Contents](#0.1)
 ## Data Identification <a class="anchor" id="2"></a>
@@ -81,6 +81,13 @@ Identify valuable information
 [Back to Table of Contents](#0.1)
 ## Data Analysis <a class="anchor" id="4"></a>
 
+Create environment
+
+```bash
+python3 -m venv env
+. env/bin/activate
+```
+
 Install libraries
 
 ```bash
@@ -92,6 +99,7 @@ Run the project
 analyze: console/file. Generate the summary in a file or console
 training: console/file. Generate the summary in a file or console, it's required analyze to use this command
 normalization: yes/no. Generate all analysis and training with a normalization data
+storage_model: yes/no. Save each model in a joblib file to test on unittest section
 
 ```bash
 python3 main.py --analyze console --training file --normalization no
@@ -107,24 +115,21 @@ The following graph shows the percentage of null in the dataset. It is visible t
 
 The initial correlation is created to understand which fields are valuable for solving the problem definition (price). Initially, it is notable that year, parking assist, alloy wheels, and transmission have a bit of relevance. Nevertheless, the other columns are categorical. Those could be more accurate once they become to numerical. As a result, it is necessary cleaning the data.
 
-![heat_map_corr_correlation_of_features.png](reports%2Ffigures%2Fheat_map_corr_correlation_of_features.png)
+![heat_map_corr_correlation_before_cleaning.png](reports%2Ffigures%2Fheat_map_corr_correlation_before_cleaning.png)
 
-Another correlation is created to identify after becoming some Categoricals fields into numerical how many relations there are between each other. Notably, year, Drivetrain, fueltype, and transmission have relevant values to predict car price.
-
-![heat_map_corr_correlation_of_features_cleaned.png](reports%2Ffigures%2Fheat_map_corr_correlation_of_features_cleaned.png)
 
 ### Graph: Number of Ads by City
-This graph shows that the majority of the ads were published in Calgary, with 16,219 ads, in contrast with other cities.
+This graph shows that the majority of the ads were published in Calgary, with 16,612 ads, in contrast with other cities.
 
 ![count_bar_plot_number_of_ads_by_city.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_city.png)
 
 ### Graph: Number of Ads by Year
-This graph shows that the majority of the ads were published in 2022, with 46,827 ads, in contrast with the previous year, with 1,689 ads
+This graph shows that the majority of the ads were published in 2022, with 47,546 ads, in contrast with the previous year, with 1,733 ads
 
 ![count_bar_plot_number_of_ads_by_year.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_year.png)
 
 ### Graph: Number of Ads by Month
-This graph shows that the majority of the ads were published in August, with 20,779 ads, in contrast with the other months. As a hypothesis, it could be related to the Summer season.
+This graph shows that the majority of the ads were published in August, with 20,847 ads, in contrast with the other months. As a hypothesis, it could be related to the Summer season.
 
 ![count_bar_plot_number_of_ads_by_month.png](reports%2Ffigures%2Fcount_bar_plot_number_of_ads_by_month.png)
 
@@ -134,53 +139,29 @@ This graph shows that July and August are the great months in 3 years with more 
 ![bar_plot_number_of_visits_by_month.png](reports%2Ffigures%2Fbar_plot_number_of_visits_by_month.png)
 
 ### Graph: Number of Visits by Month and Year
-This graph shows that 2022 increased the visits compared to the previous years. In addition, July and August are the highlight months, with more than 3,000,000 visits each month, in contrast with the other months. It is very related to the number of ads published with the visits in the summer season.
+This graph shows that 2022 increased the visits compared to the previous years in City of Toronto and Calgary. 
 
 ![line_plot_monthly_visits_by_year.png](reports%2Ffigures%2Fline_plot_monthly_visits_by_year.png)
 
-### Graph: Number of Visits by Year (Make Car)
+### Graph: Number of Visits by Year by City
 This graph shows that Ford has been one of the more searched cars in the last two years.
+![bar_plot_visits_by_year_by_city.png](reports%2Ffigures%2Fbar_plot_visits_by_year_by_city.png)
 
+### Graph: Media Visit by Year (Make Car)
+This graph shows that Ford, Chevrolet, and Toyota are more searched on Kijiji in the last two years.
 ![bar_plot_make_(visit)_by_year.png](reports%2Ffigures%2Fbar_plot_make_%28visit%29_by_year.png)
-
-### Graph: Number of Kilometers by Year (Make Car)
-This graph shows that Saab has been one of the brands with more kilometers published on Kijiji in the last two years.
-
-![bar_plot_make_(kilometers)_by_year.png](reports/figures/bar_plot_make_(kilometers)_by_year.png)
-
-### Graph: Media Price by Year (Make Car)
-This graph shows that Lamborghini, Mclaren, and Rolls-Royce are more expensive brands published on Kijiji in the last two years.
-
-![bar_plot_make_(mean_price)_by_year.png](reports%2Ffigures%2Fbar_plot_make_%28mean_price%29_by_year.png)
-
-### Graph: Media Price by Year
-This graph shows that the price has increased in the last few years. Even though there is missing data (September to December) in 2022, it will exceed 2021.
-
-![bar_plot_price_per_year.png](reports%2Ffigures%2Fbar_plot_price_per_year.png)
 
 ### Graph: Shared-of-Visit by Year
 This graph shows the distribution in the last years, where 2022 year got 82% of the visits
 
 ![count_pie_plot_share-of-visit_by_year.png](reports%2Ffigures%2Fcount_pie_plot_share-of-visit_by_year.png)
 
-### Graph: Model Car by year Car
-This graph shows that the model 2022 is the most published on Kijiji, with 8,464 ads.
-
-![count_bar_plot_model_car_by_year.png](reports%2Ffigures%2Fcount_bar_plot_model_car_by_year.png)
-
-### Graph: Mean Price per model year
-This graph shows that the 1968 model is the most common mean-price car in recent years.
-
-![bar_plot_mean_price_per_model_year.png](reports%2Ffigures%2Fbar_plot_mean_price_per_model_year.png)
-
 ### Identify Outliers
 In the next step, it is going to identify prices that seem to be errors with the Z score method.  The Z score method is used to determine how many standard deviations a data point is from the mean. Roughly 68%, 95%, and 99.7% of the data points fall within 1, 2, and 3 standard deviations from the mean, respectively. Data points with a Z score greater than 3 are considered outliers.
+![distribution_kdeplot_before_-_visits_density.png](reports%2Ffigures%2Fdistribution_kdeplot_before_-_visits_density.png)
 
-![distribution_kdeplot_before_price_density.png](reports%2Ffigures%2Fdistribution_kdeplot_before_price_density.png)
-
-As the last step of data preprocessing, all the branded cars were collected in different data sets stored in a dictionary to be processed one by one. Categorical fields were converted into numerical (fuel type, condition, model, city, transmission) and unnecessary fields such as visits, kilometers, c_year c_month c_month_name.	
-
-![distribution_kdeplot_after_price_density.png](reports%2Ffigures%2Fdistribution_kdeplot_after_price_density.png)
+As the last step of data preprocessing, all the branded cars were collected in different data sets stored in a dictionary to be processed one by one. Categorical fields were converted into numerical (fuel type, condition, model, city, transmission) and unnecessary fields such as visits, kilometers, cyear cmonth cmonthname.	
+![distribution_kdeplot_after_-_visits_density.png](reports%2Ffigures%2Fdistribution_kdeplot_after_-_visits_density.png)
 
 As a result of cleaning the outliers the price density changed. It is notable that a lot of prices are distributed between $100 to $100,000.
 
@@ -189,13 +170,8 @@ As a result of cleaning the outliers the price density changed. It is notable th
 - A negative covariance reveals that there is an inverse relationship between the variables, that is, as one increases, the other tends to decrease.
 - If the ad price goes up, the number of visits will reduce.
 
-![count_scatter_correlation_price.png](reports%2Ffigures%2Fcount_scatter_correlation_price.png)
-
+![count_scatter_correlation_month.png](reports%2Ffigures%2Fcount_scatter_correlation_month.png)
 ![count_lmplot_correlation_price_per_year.png](reports%2Ffigures%2Fcount_lmplot_correlation_price_per_year.png)
-
-The price density by make car shows that some make cars, such as Eagle, Suzuki, Saab, and Daihatsu, their distribution tells that have a common price.
-
-![facet_grid_density_make_vs_price.png](reports%2Ffigures%2Ffacet_grid_density_make_vs_price.png)
 
 ### Train/Test Data
 Once the preprocessing steps were completed, the dataset was divided into two sets: a training set (60% of the data) and the test dataset was taken directly from the data frame, for each publication, all the models were applied and the model with the best performance was chosen.
@@ -227,11 +203,10 @@ There are a lot of errors between each model; identify the percentage of the mod
 ### Analyzing the Best Result
 After comparing the real price vs. the price predicted by each model, it is shown that the price expected has similar behavior to the real ones, which means that the project had a good result; however, in the car models from 1940 to 1960, the data require more cleansing in order to improve the prediction.
 
-![comparison_plot_rfr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_rfr_mean_price_vs_mean_price_predicted.png)
-![comparison_plot_lr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_lr_mean_price_vs_mean_price_predicted.png)
-![comparison_plot_gbr_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_gbr_mean_price_vs_mean_price_predicted.png)
-![comparison_plot_mean_price_vs_mean_price_predicted.png](reports%2Ffigures%2Fcomparison_plot_mean_price_vs_mean_price_predicted.png)
-
+![comparison_plot_rfr_mean_visit_vs_mean_visit_predicted.png](reports%2Ffigures%2Fcomparison_plot_rfr_mean_visit_vs_mean_visit_predicted.png)
+![comparison_plot_lr_mean_visit_vs_mean_visit_predicted.png](reports%2Ffigures%2Fcomparison_plot_lr_mean_visit_vs_mean_visit_predicted.png)
+![comparison_plot_gbr_mean_visit_vs_mean_visit_predicted.png](reports%2Ffigures%2Fcomparison_plot_gbr_mean_visit_vs_mean_visit_predicted.png)
+![comparison_plot_mean_visit_vs_mean_visit_predicted.png](reports%2Ffigures%2Fcomparison_plot_mean_visit_vs_mean_visit_predicted.png)
 
 [Back to Table of Contents](#0.1)
 ## Conclusion <a class="anchor" id="5"></a>

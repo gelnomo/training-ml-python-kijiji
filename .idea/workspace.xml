@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="01af032a-fdc1-4952-b69d-5773a21ef0d6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/kijiji_price.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/enums.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/outliers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/output_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/bar_plot_visits_by_year_by_city.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_gbr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_lr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_rfr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/count_scatter_correlation_month.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/distribution_kdeplot_after_-_visits_density.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/distribution_kdeplot_before_-_visits_density.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/facet_grid_density_city_vs_visit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/heat_map_corr_correlation_after_cleaning.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/figures/heat_map_corr_correlation_before_cleaning.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Calgary.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_City Of Toronto.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Downtown-West End.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Gatineau.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_North Shore.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Ottawa.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Richmond.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Ubc.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Vancouver.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Calgary.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_City Of Toronto.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Downtown-West End.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Gatineau.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_North Shore.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Ottawa.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Richmond.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Ubc.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/LR_Vancouver.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Calgary.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_City Of Toronto.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Downtown-West End.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Gatineau.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_North Shore.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Ottawa.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Richmond.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Ubc.joblib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Vancouver.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/56e5b478-512f-4841-9d57-3f59bec7d62a.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kijiji_views.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/input/data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/VISITS.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Audi.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Chevrolet.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Ford.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Nissan.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Suzuki.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/GBR_Volkswagen.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Audi.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Chevrolet.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Ford.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Nissan.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Suzuki.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/LR_Volkswagen.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Audi.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Chevrolet.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Ford.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Nissan.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Suzuki.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/job_lib/RFR_Volkswagen.joblib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output/result.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/analyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/analyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/cleansing.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cleansing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/enums.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/extraction.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/extraction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/output_result.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/transformations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/gradient_boostring_regressor/train_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/gradient_boostring_regressor/train_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/linear_regression/train_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/linear_regression/train_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/metrics/all_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/random_forest_regressor/train_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/random_forest_regressor/train_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_make_(kilometers)_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_make_(mean_price)_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_make_(visit)_by_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/bar_plot_make_(visit)_by_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_mean_price_per_model_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_number_of_visits_by_month.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/bar_plot_number_of_visits_by_month.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/bar_plot_price_per_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_gbr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_lr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_rfr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_bar_plot_model_car_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_city.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_city.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_month.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_month.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_bar_plot_number_of_ads_by_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_lmplot_correlation_price_per_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_lmplot_correlation_price_per_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_pie_plot_share-of-visit_by_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_pie_plot_share-of-visit_by_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_scatter_correlation_price.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/distribution_kdeplot_after_price_density.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/distribution_kdeplot_before_price_density.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/facet_grid_density_make_vs_price.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/heat_map_corr_correlation_of_features.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/heat_map_corr_correlation_of_features_cleaned.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/line_plot_monthly_visits_by_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/line_plot_monthly_visits_by_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_make_(kilometers)_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_make_(mean_price)_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_make_(visit)_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_mean_price_per_model_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_number_of_visits_by_month.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_percentage_nulls_per_columns.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/bar_plot_price_per_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/comparison_plot_gbr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/comparison_plot_lr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/comparison_plot_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/comparison_plot_rfr_mean_price_vs_mean_price_predicted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_bar_plot_model_car_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_bar_plot_number_of_ads_by_city.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_bar_plot_number_of_ads_by_month.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_bar_plot_number_of_ads_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_lmplot_correlation_price_per_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_pie_plot_share-of-visit_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/count_scatter_correlation_price.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/distribution_kdeplot_after_price_density.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/distribution_kdeplot_before_price_density.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/facet_grid_density_make_vs_price.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/heat_map_corr_correlation_of_features.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/heat_map_corr_correlation_of_features_cleaned.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/heatmap_nulls_quantity_nulls_per_column.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures_n/line_plot_monthly_visits_by_year.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/result.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualizations/visualize.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/visualization.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NNwPbULexkB6kT7HzHnAsfmeC2" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RunManager" selected="Python tests.pytest for test.TestCarPricePrediction">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="kijiji_price" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
+      <module name="kijiji_price" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/env/bin/python" />
+      <option name="SDK_NAME" value="Python 3.9 (kijiji_price)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="--analyze console --training console --normalization yes --storage_model no" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test.TestCarPricePrediction" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="kijiji_price" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test.TestCarPricePrediction&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python tests.pytest for test.TestCarPricePrediction" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for test.TestCarPricePrediction" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="01af032a-fdc1-4952-b69d-5773a21ef0d6" name="Changes" comment="" />
+      <created>1679517824688</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679517824688</updated>
+      <workItem from="1679517825936" duration="2167000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/kijiji_price$main.coverage" NAME="main Coverage Results" MODIFIED="1679517968308" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kijiji_price$pytest_for_test_TestCarPricePrediction.coverage" NAME="pytest for test.TestCarPricePrediction Coverage Results" MODIFIED="1679518712427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+  </component>
+</project>

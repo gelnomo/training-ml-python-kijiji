@@ -48,8 +48,8 @@ def train_gradient_boosting_regressor(
         test_score = gbr.score(x_test, y_test)
 
         if storage_model:
-            make = data["make"].unique()
-            joblib.dump(gbr, f"data/output/job_lib/GBR_{'_'.join(make)}.joblib")
+            city = data["city"].unique()
+            joblib.dump(gbr, f"reports/job_lib/GBR_{'_'.join(city).replace('/', '-') }.joblib")
 
         # Return the trained model and the R^2 scores
         return gbr, train_score, test_score
