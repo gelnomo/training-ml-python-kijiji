@@ -358,5 +358,8 @@ class AnalyzeData:
         self.__get_facet_grid_make()
 
         del self.extraction_data
-
+        self.__group_values()
         return self.VISITS, unique_city, self.standard_normalization
+
+    def __group_values(self):
+        self.VISITS = self.VISITS.groupby(["city", "cmonth", "cyear"], as_index=False)["visit"].sum()

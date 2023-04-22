@@ -4,7 +4,61 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01af032a-fdc1-4952-b69d-5773a21ef0d6" name="Changes" comment="Last version" />
+    <list default="true" id="01af032a-fdc1-4952-b69d-5773a21ef0d6" name="Changes" comment="Last version">
+      <change afterPath="$PROJECT_DIR$/reports/output/2023_04_01_output.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/output/2023_04_21_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Kijiji Visits.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Kijiji Views.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1a138261-8959-40af-bdc0-5c20a9972d34.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1a138261-8959-40af-bdc0-5c20a9972d34.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/analyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/analyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_gbr_mean_visit_vs_mean_visit_predicted.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_gbr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_lr_mean_visit_vs_mean_visit_predicted.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_lr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_mean_visit_vs_mean_visit_predicted.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/comparison_plot_rfr_mean_visit_vs_mean_visit_predicted.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/comparison_plot_rfr_mean_visit_vs_mean_visit_predicted.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_lmplot_correlation_price_per_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_lmplot_correlation_price_per_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/figures/count_pie_plot_share-of-visit_by_year.png" beforeDir="false" afterPath="$PROJECT_DIR$/reports/figures/count_pie_plot_share-of-visit_by_year.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Burnaby-New Westminster.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Calgary.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Calgary.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_City Of Toronto.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_City Of Toronto.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Delta-Surrey-Langley.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Downtown-West End.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Downtown-West End.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Gatineau.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Gatineau.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_North Shore.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_North Shore.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Ottawa.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Ottawa.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Richmond.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Richmond.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Tricities-Pitt-Maple.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Ubc.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Ubc.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/GBR_Vancouver.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/GBR_Vancouver.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Burnaby-New Westminster.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Calgary.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Calgary.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_City Of Toronto.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_City Of Toronto.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Delta-Surrey-Langley.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Downtown-West End.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Downtown-West End.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Gatineau.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Gatineau.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_North Shore.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_North Shore.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Ottawa.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Ottawa.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Richmond.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Richmond.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Tricities-Pitt-Maple.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Ubc.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Ubc.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/LR_Vancouver.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/LR_Vancouver.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Burnaby-New Westminster.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Burnaby-New Westminster.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Calgary.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Calgary.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_City Of Toronto.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_City Of Toronto.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Delta-Surrey-Langley.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Delta-Surrey-Langley.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Downtown-West End.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Downtown-West End.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Gatineau.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Gatineau.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_North Shore.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_North Shore.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Ottawa.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Ottawa.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Richmond.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Richmond.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Tricities-Pitt-Maple.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Tricities-Pitt-Maple.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Ubc.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Ubc.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/job_lib/RFR_Vancouver.joblib" beforeDir="false" afterPath="$PROJECT_DIR$/reports/job_lib/RFR_Vancouver.joblib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/result.sqlite" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +66,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/reports/output/2023_04_01_output.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -31,17 +88,19 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/erwinmongui/Documents/Lambton/Kijiji Views",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "com.obiscr.chatgpt.settings.GPT3-3.5-Turbo"
   }
 }]]></component>
-  <component name="RunManager" selected="Python tests.pytest for test.TestCarPricePrediction">
+  <component name="RunManager" selected="Python.main">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="kijiji_price" />
+      <module name="Kijiji Views" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -63,21 +122,20 @@
       <method v="2" />
     </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python">
-      <module name="kijiji_price" />
+      <module name="Kijiji Views" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/env/bin/python" />
-      <option name="SDK_NAME" value="Python 3.9 (kijiji_price)" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="--analyze console --training console --normalization yes --storage_model no" />
+      <option name="PARAMETERS" value="--analyze file --training file --normalization no --storage_model no" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -86,7 +144,7 @@
       <method v="2" />
     </configuration>
     <configuration name="pytest for test.TestCarPricePrediction" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="kijiji_price" />
+      <module name="Kijiji Views" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -120,7 +178,40 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1679517824688</updated>
-      <workItem from="1679517825936" duration="2389000" />
+      <workItem from="1679517825936" duration="2550000" />
+      <workItem from="1679520622373" duration="1183000" />
+      <workItem from="1679533880385" duration="49000" />
+      <workItem from="1679533950185" duration="1454000" />
+      <workItem from="1679577498847" duration="64000" />
+      <workItem from="1679578994191" duration="159000" />
+      <workItem from="1679579172885" duration="1567000" />
+      <workItem from="1679581786939" duration="8000" />
+      <workItem from="1679608181013" duration="76000" />
+      <workItem from="1679668089868" duration="196000" />
+      <workItem from="1679759305721" duration="151000" />
+      <workItem from="1679937409283" duration="1189000" />
+      <workItem from="1679951743849" duration="672000" />
+      <workItem from="1680020700852" duration="1069000" />
+      <workItem from="1680137986668" duration="1227000" />
+      <workItem from="1680272130922" duration="43000" />
+      <workItem from="1680272219889" duration="667000" />
+      <workItem from="1680277622002" duration="681000" />
+      <workItem from="1680356591345" duration="1687000" />
+      <workItem from="1680364818558" duration="268000" />
+      <workItem from="1680376574473" duration="98000" />
+      <workItem from="1680476493953" duration="625000" />
+      <workItem from="1680527071189" duration="574000" />
+      <workItem from="1680547765422" duration="606000" />
+      <workItem from="1680551492886" duration="3256000" />
+      <workItem from="1680559116050" duration="366000" />
+      <workItem from="1680610564354" duration="602000" />
+      <workItem from="1680804340690" duration="229000" />
+      <workItem from="1681434444959" duration="392000" />
+      <workItem from="1681479695343" duration="462000" />
+      <workItem from="1681559831469" duration="1710000" />
+      <workItem from="1681820513333" duration="812000" />
+      <workItem from="1682086369568" duration="329000" />
+      <workItem from="1682086710705" duration="20099000" />
     </task>
     <task id="LOCAL-00001" summary="Last version">
       <created>1679520375699</created>
@@ -129,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679520375699</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Last version">
+      <created>1679520470978</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1679520470978</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,7 +239,8 @@
     <option name="LAST_COMMIT_MESSAGE" value="Last version" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/kijiji_price$main.coverage" NAME="main Coverage Results" MODIFIED="1679517968308" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kijiji_price$pytest_for_test_TestCarPricePrediction.coverage" NAME="pytest for test.TestCarPricePrediction Coverage Results" MODIFIED="1679518712427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Kijiji_Views$main.coverage" NAME="main Coverage Results" MODIFIED="1682132134832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kijiji_price$main.coverage" NAME="main Coverage Results" MODIFIED="1679517968308" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

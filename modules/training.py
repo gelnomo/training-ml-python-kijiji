@@ -1,3 +1,4 @@
+import joblib
 import numpy as np
 import pandas as pd
 from typing import List
@@ -52,11 +53,11 @@ class TrainingData:
     exclude_columns = ["visit", "city"]
 
     def __init__(
-        self,
-        data: pd.DataFrame,
-        unique_cities: List,
-        output: OutputTypeEnum,
-        storage_model: OptionEnum,
+            self,
+            data: pd.DataFrame,
+            unique_cities: List,
+            output: OutputTypeEnum,
+            storage_model: OptionEnum,
     ):
         self.output = output
         self.data = data.copy()
@@ -97,7 +98,7 @@ class TrainingData:
         output_result.process(df_result_model)
 
     def __get_mean_visit_predicted_by_model(
-        self, data: pd.DataFrame, model: str
+            self, data: pd.DataFrame, model: str
     ) -> None:
         """
         Get mean visit predicted by model
@@ -142,13 +143,6 @@ class TrainingData:
 
         for item in self.unique_cities:
             dict_df_transform[item] = self.data[self.data["city"] == item].copy()
-
-            dict_df_transform[item] = dummify(dict_df_transform[item], "make")
-            dict_df_transform[item] = dummify(dict_df_transform[item], "condition")
-            dict_df_transform[item].drop(
-                columns=["cmonth", "cmonthname"],
-                inplace=True,
-            )
             dict_df_transform[item].drop_duplicates(inplace=True)
 
         for item in tqdm(self.unique_cities, desc="City"):
@@ -201,9 +195,9 @@ class TrainingData:
             dict_df_transform[item][self.columns_metrics] = np.nan
 
             for index, row in tqdm(
-                dict_df_transform[item].iterrows(),
-                desc=f"{item}: {len(dict_df_transform[item])}",
-                leave=False,
+                    dict_df_transform[item].iterrows(),
+                    desc=f"{item}: {len(dict_df_transform[item])}",
+                    leave=False,
             ):
                 predicted_lr = self.__predict(
                     lr, dict_df_transform[item][columns_names].loc[index]
@@ -272,23 +266,23 @@ class TrainingData:
         df_result.reset_index(drop=True, inplace=True)
 
         df_result["visit_predicted"] = np.where(
-            (df_result["predicted rfr MSE"] < df_result["predicted lr MSE"])
-            & (df_result["predicted rfr MSE"] < df_result["predicted gbr MSE"]),
+            (df_result["predicted rfr R2S"] < df_result["predicted lr R2S"])
+            & (df_result["predicted rfr R2S"] < df_result["predicted gbr R2S"]),
             df_result["predicted rfr"],
             np.where(
-                (df_result["predicted lr MSE"] < df_result["predicted rfr MSE"])
-                & (df_result["predicted lr MSE"] < df_result["predicted gbr MSE"]),
+                (df_result["predicted lr R2S"] < df_result["predicted rfr R2S"])
+                & (df_result["predicted lr R2S"] < df_result["predicted gbr R2S"]),
                 df_result["predicted lr"],
                 df_result["predicted gbr"],
             ),
         )
         df_result["model_predicted"] = np.where(
-            (df_result["predicted rfr MSE"] < df_result["predicted lr MSE"])
-            & (df_result["predicted rfr MSE"] < df_result["predicted gbr MSE"]),
+            (df_result["predicted rfr R2S"] < df_result["predicted lr R2S"])
+            & (df_result["predicted rfr R2S"] < df_result["predicted gbr R2S"]),
             "RFR",
             np.where(
-                (df_result["predicted lr MSE"] < df_result["predicted rfr MSE"])
-                & (df_result["predicted lr MSE"] < df_result["predicted gbr MSE"]),
+                (df_result["predicted lr R2S"] < df_result["predicted rfr R2S"])
+                & (df_result["predicted lr R2S"] < df_result["predicted gbr R2S"]),
                 "LR",
                 "GBR",
             ),
@@ -298,7 +292,6 @@ class TrainingData:
         self.__get_mean_visit_predicted_by_model(df_result, "LR")
         self.__get_mean_visit_predicted_by_model(df_result, "RFR")
         self.__get_mean_visit_predicted_by_model(df_result, "GBR")
-        self.__get_mean_visit_predicted(df_result)
 
         if standard_normalization:
             df_result["visit"] = standard_normalization.inverse_transform(
@@ -308,5 +301,57 @@ class TrainingData:
                 df_result[["visit_predicted"]]
             )
 
+        for item in self.unique_cities:
+            for j in range(2022, 2024):
+                if j == 2022:
+                    n = 9
+                else:
+                    n = 1
+
+                for i in range(n, 12):
+                    data_set_visits = pd.DataFrame({
+                        "cmonth": i,
+                        "cyear": j,
+                    }, index=[0]
+                    )
+                    predict_value = self.__predict_new_visits(data_set_visits, "GBR", item)
+                    temp_df = pd.DataFrame({
+                        "city": item,
+                        "cmonth": i,
+                        "cyear": j,
+                        "visit": predict_value,
+                    }, index=[df_result.index.max() + 1]
+                    )
+
+                df_result = df_result.append(temp_df)
+
+        self.__get_mean_visit_predicted(df_result)
+
+        for item in self.unique_cities:
+            self.__get_visit_predicted_by_city(item, df_result)
+
         storage_sqlite(df_result, "PREDICTED")
-        del df_result
+
+    def __get_visit_predicted_by_city(self, city, data: pd.DataFrame) -> None:
+        """
+        Generate graph mean visit vs mean visit predicted
+        :param data: initial dataframe
+        """
+        print(f"Generating Graph: Mean visit vs Mean visit predicted [{city}]")
+
+        result = data[data["city"] == city].groupby(by="cyear", as_index=False)[
+            "visit", "visit_predicted"
+        ].mean()
+        self.general_graphs.title = f"Mean visit vs Mean visit predicted - {city}"
+        self.general_graphs.comparison_plot(
+            result, "cyear", "visit", "visit_predicted"
+        )
+
+    def __predict_new_visits(self, X_test, model_name, city):
+
+        model = joblib.load(f"reports/job_lib/{model_name}_{city.replace('/', '-')}.joblib")
+
+        # Make predictions
+        y_pred = model.predict(X_test)
+
+        return y_pred

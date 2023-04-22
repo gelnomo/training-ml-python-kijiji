@@ -1,0 +1,101 @@
+Get Initial Data
+[2023-04-01 10:01:14]
+         AdID                     city  latitude  longitude  mapAddress                                              title  price saleby        make           model    Trim  year condition  Kilometers          body Drivetrain fueltype   color                Date   visit No of door No of seats  Transmission  push button start  parking assist  sunroof  alloy wheels  VIN
+0  1623070279  Burnaby/New Westminster       NaN        NaN         NaN                                  Suzuki Jimny 2006  14999  owner      Suzuki           other     NaN  2006      used       37600         wagon        4x4      gas   black 2022-06-27 20:16:56     NaN          3           4           1.0                NaN             NaN      NaN           NaN  NaN
+1  1623097429     Delta/Surrey/Langley       NaN        NaN         NaN                                  Mustang cobra 99   26000  owner        Ford         mustang  cobra   1999      used        5000  coupe_2_door        rwd      NaN   black 2022-06-28 03:02:22  2026.0          2           4           1.0                NaN             NaN      NaN           NaN  NaN
+2  1595531267     Delta/Surrey/Langley       NaN        NaN         NaN  2006 Nissan Frontier SE 4X4 - Local BC | No Ac...  13995  owner      Nissan        frontier      SE  2006      used      227000  pickup_truck        4x4      gas   black 2022-06-28 22:53:29   795.0          4           5           2.0                NaN             NaN      NaN           1.0  NaN
+3  1623215000     Delta/Surrey/Langley       NaN        NaN         NaN                                    1985 Chevy 1500   3300  owner   Chevrolet  ck_pickup_1500     NaN  1985      used      180000  pickup_truck        4x4      gas    blue 2022-06-29 10:30:00  1020.0          4           5           2.0                NaN             NaN      NaN           NaN  NaN
+4  1623286366     Delta/Surrey/Langley       NaN        NaN         NaN                          2006 Volkswagen Jetta TDI   2700  owner  volkswagen           jetta     NaN  2006      used      307000         sedan        fwd   diesel  silver 2022-06-29 14:28:28  1396.0          4           5           1.0                NaN             NaN      NaN           NaN  NaN
+Get Shape
+[2023-04-01 10:01:14]
+The shape of the dataset is: (51343, 28)
+Get Description
+[2023-04-01 10:01:14]
+                     count unique                            top   freq               first                last          mean            std     min      25%      50%       75%         max
+AdID                 51343  51342                       m4320099      2                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+city                 51343     12                        Calgary  17176                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+latitude               0.0    NaN                            NaN    NaN                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+longitude              0.0    NaN                            NaN    NaN                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+mapAddress             0.0    NaN                            NaN    NaN                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+title                51342  38931  2022 Ram 1500 Classic WARLOCK    179                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+price              51343.0    NaN                            NaN    NaN                 NaT                 NaT   37198.79224  442258.881411     0.0  13570.0  29295.0   49995.0  99999999.0
+saleby               51343      2                         dealer  38132                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+make                 51343     65                           Ford   6535                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+model                51343    741                          other   5518                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Trim                 44143  16416                             SE    845                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+year               51343.0    NaN                            NaN    NaN                 NaT                 NaT   2015.561459       6.877405  1900.0   2013.0   2017.0    2021.0      2023.0
+condition            51343      5                           used  41679                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Kilometers         51343.0    NaN                            NaN    NaN                 NaT                 NaT  97731.696804  140004.001034     0.0  15168.5  75947.0  150000.0   9999999.0
+body                 51343      9                  suv_crossover  19609                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Drivetrain           47557      5                            awd  15164                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+fueltype             47553      5                            gas  29733                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+color                48835     19                          black  12603                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Date                 51343  44851            2022-07-19 19:04:01     12 2019-05-30 11:15:00 2022-08-27 12:44:05           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+visit              50541.0    NaN                            NaN    NaN                 NaT                 NaT    294.065333     858.379622     0.0     15.0     75.0     261.0     54064.0
+No of door           34665      6                              4  28880                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+No of seats          31829     16                              5  22131                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Transmission       47339.0    NaN                            NaN    NaN                 NaT                 NaT      1.929994        0.29573     0.0      2.0      2.0       2.0         3.0
+push button start  17088.0    NaN                            NaN    NaN                 NaT                 NaT      0.991983       0.089182     0.0      1.0      1.0       1.0         1.0
+parking assist     12068.0    NaN                            NaN    NaN                 NaT                 NaT      0.989228       0.103233     0.0      1.0      1.0       1.0         1.0
+sunroof            11710.0    NaN                            NaN    NaN                 NaT                 NaT      0.991119       0.093825     0.0      1.0      1.0       1.0         1.0
+alloy wheels       18601.0    NaN                            NaN    NaN                 NaT                 NaT      0.996237       0.061231     0.0      1.0      1.0       1.0         1.0
+VIN                    0.0    NaN                            NaN    NaN                 NaT                 NaT           NaN            NaN     NaN      NaN      NaN       NaN         NaN
+Get Info
+[2023-04-01 10:01:15]
+None
+Get Overall
+[2023-04-01 10:01:15]
+                   Count  Difference  %Difference  Unique    %Unique  Duplicated  %Duplicated   Null       %Null            type
+AdID               51343           0     0.000000   51342  99.998052           1     0.001948      0    0.000000          object
+city               51343           0     0.000000      12   0.023372           1     0.001948      0    0.000000          object
+latitude               0       51343   100.000000       0   0.000000           1     0.001948  51343  100.000000         float64
+longitude              0       51343   100.000000       0   0.000000           1     0.001948  51343  100.000000         float64
+mapAddress             0       51343   100.000000       0   0.000000           1     0.001948  51343  100.000000         float64
+title              51342           1     0.001948   38931  75.825332           1     0.001948      1    0.001948          object
+price              51343           0     0.000000   12404  24.159087           1     0.001948      0    0.000000           int64
+saleby             51343           0     0.000000       2   0.003895           1     0.001948      0    0.000000          object
+make               51343           0     0.000000      65   0.126600           1     0.001948      0    0.000000          object
+model              51343           0     0.000000     741   1.443235           1     0.001948      0    0.000000          object
+Trim               44143        7200    14.023333   16416  31.973200           1     0.001948   7200   14.023333          object
+year               51343           0     0.000000      77   0.149972           1     0.001948      0    0.000000           int64
+condition          51343           0     0.000000       5   0.009738           1     0.001948      0    0.000000          object
+Kilometers         51343           0     0.000000   25780  50.211324           1     0.001948      0    0.000000           int64
+body               51343           0     0.000000       9   0.017529           1     0.001948      0    0.000000          object
+Drivetrain         47557        3786     7.373936       5   0.009738           1     0.001948   3786    7.373936          object
+fueltype           47553        3790     7.381727       5   0.009738           1     0.001948   3790    7.381727          object
+color              48835        2508     4.884794      19   0.037006           1     0.001948   2508    4.884794          object
+Date               51343           0     0.000000   44851  87.355628           1     0.001948      0    0.000000  datetime64[ns]
+visit              50541         802     1.562044    2810   5.472995           1     0.001948    802    1.562044         float64
+No of door         34665       16678    32.483493       6   0.011686           1     0.001948  16678   32.483493          object
+No of seats        31829       19514    38.007129      16   0.031163           1     0.001948  19514   38.007129          object
+Transmission       47339        4004     7.798531       4   0.007791           1     0.001948   4004    7.798531         float64
+push button start  17088       34255    66.717956       2   0.003895           1     0.001948  34255   66.717956         float64
+parking assist     12068       39275    76.495335       2   0.003895           1     0.001948  39275   76.495335         float64
+sunroof            11710       39633    77.192607       2   0.003895           1     0.001948  39633   77.192607         float64
+alloy wheels       18601       32742    63.771108       2   0.003895           1     0.001948  32742   63.771108         float64
+VIN                    0       51343   100.000000       0   0.000000           1     0.001948  51343  100.000000         float64
+Identify The Duplicated Values
+[2023-04-01 10:01:17]
+          AdID         city  latitude  longitude  mapAddress                                           title  price  saleby      make     model                     Trim  year condition  Kilometers         body Drivetrain fueltype  color                Date  visit No of door No of seats  Transmission  push button start  parking assist  sunroof  alloy wheels  VIN
+7733  m4320099  North Shore       NaN        NaN         NaN  2022 Chrysler Pacifica TOURING All-wheel Drive  57430  dealer  Chrysler  pacifica  TOURING All-wheel Drive  2022       new           0  minivan_van        awd      gas  black 2022-07-19 15:25:48    6.0          4           7           2.0                NaN             NaN      NaN           NaN  NaN
+Columns To Be Deleted With More Than 60% Of Nulls
+[2023-04-01 10:01:17]
+['latitude' 'longitude' 'mapAddress' 'push button start' 'parking assist'
+ 'sunroof' 'alloy wheels' 'VIN']
+Explicit Columns To Be Deleted
+[2023-04-01 10:01:17]
+['title', 'saleby', 'Trim', 'body', 'color', 'No of door', 'No of seats', 'model', 'fueltype', 'Kilometers', 'Drivetrain', 'Transmission', 'year', 'price']
+Identify Unique Cities Values
+[2023-04-01 10:01:17]
+['Burnaby/New Westminster' 'Delta/Surrey/Langley' 'Richmond' 'Vancouver'
+ 'Tricities/Pitt/Maple' 'Downtown-West End' 'North Shore' 'Ubc'
+ 'City Of Toronto' 'Gatineau' 'Ottawa' 'Calgary']
+Get Covariance
+[2023-04-01 10:01:58]
+-0.02412118221508085
+Get Percentage Use
+[2023-04-01 10:03:14]
+  model_predicted  city  model_predicted%
+0             GBR   758         31.296449
+1              LR   646         26.672172
+2             RFR  1018         42.031379
