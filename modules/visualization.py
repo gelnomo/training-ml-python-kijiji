@@ -1,420 +1,172 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
-from typing import List, Tuple
-from scipy.stats import norm
+"""Chart helpers with one consistent, colorblind-safe style. Every chart is saved as PNG."""
+
+from pathlib import Path
+from typing import Optional
+
+import matplotlib
+
+matplotlib.use("Agg")  # headless: charts are written to disk, never shown
+
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+import seaborn as sns  # noqa: E402
+from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
+from matplotlib.ticker import FuncFormatter  # noqa: E402
+
+from modules.config import FIGURES_DIR  # noqa: E402
+from modules.utils import slugify  # noqa: E402
+
+# Palette: categorical slots in fixed order + inks + a blue/gray/red diverging map
+BLUE, ORANGE, AQUA = "#2a78d6", "#eb6834", "#1baf7a"
+INK, INK_SECONDARY, GRID = "#0b0b0b", "#52514e", "#e4e3df"
+DIVERGING = LinearSegmentedColormap.from_list("blue_gray_red", ["#2a78d6", "#f0efec", "#e34948"])
+
+THOUSANDS = FuncFormatter(lambda x, _: f"{x:,.0f}")
+
+
+def _apply_style() -> None:
+    plt.rcParams.update(
+        {
+            "figure.dpi": 110,
+            "savefig.dpi": 110,
+            "font.size": 10,
+            "axes.titlesize": 13,
+            "axes.titleweight": "bold",
+            "axes.titlelocation": "left",
+            "axes.edgecolor": GRID,
+            "axes.labelcolor": INK_SECONDARY,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.grid": True,
+            "grid.color": GRID,
+            "grid.linewidth": 0.8,
+            "axes.axisbelow": True,
+            "xtick.color": INK_SECONDARY,
+            "ytick.color": INK_SECONDARY,
+            "text.color": INK,
+            "legend.frameon": False,
+        }
+    )
+
+
+_apply_style()
 
 
 class Visualization:
-    def __init__(self):
-        self.path = "reports/figures"
-        self._title = None
-        self._x_rotation = None
-        self._x_fontsize = None
-        self._bar_rotation = None
-        self._bar_fontsize = None
-        self._column_huge_name = None
-        self._legend_loc = "upper left"
+    def __init__(self, path: Path = FIGURES_DIR):
+        self.path = Path(path)
+        self.path.mkdir(parents=True, exist_ok=True)
 
-    def __del__(self):
-        plt.close("all")
+    def _save(self, fig: plt.Figure, name: str) -> Path:
+        file = self.path / f"{slugify(name)}.png"
+        fig.savefig(file, bbox_inches="tight", facecolor="white")
+        plt.close(fig)
+        return file
 
-    @property
-    def legend_loc(self):
-        return self._legend_loc
-
-    @legend_loc.setter
-    def legend_loc(self, new_legend_loc):
-        self._legend_loc = new_legend_loc
-
-    @property
-    def column_huge_name(self):
-        return self._column_huge_name
-
-    @column_huge_name.setter
-    def column_huge_name(self, new_column_huge_name):
-        self._column_huge_name = new_column_huge_name
-
-    @property
-    def bar_fontsize(self):
-        return self._bar_fontsize
-
-    @bar_fontsize.setter
-    def bar_fontsize(self, new_bar_fontsize):
-        self._bar_fontsize = new_bar_fontsize
-
-    @property
-    def bar_rotation(self):
-        return self._bar_rotation
-
-    @bar_rotation.setter
-    def bar_rotation(self, new_bar_rotation):
-        self._bar_rotation = new_bar_rotation
-
-    @property
-    def x_fontsize(self):
-        return self._x_fontsize
-
-    @x_fontsize.setter
-    def x_fontsize(self, new_x_fontsize):
-        self._x_fontsize = new_x_fontsize
-
-    @property
-    def x_rotation(self):
-        return self._x_rotation
-
-    @x_rotation.setter
-    def x_rotation(self, new_x_rotation):
-        self._x_rotation = new_x_rotation
-
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, new_title):
-        self._title = new_title
-
-    def count_bar_plot(
+    def bar(
         self,
-        data: pd.DataFrame,
-        column_x_name: str,
-        column_y_name: str,
-        order: List = None,
-    ) -> None:
+        data: pd.Series,
+        title: str,
+        xlabel: str,
+        ylabel: str,
+        horizontal: bool = False,
+        label_fmt: str = "{:,.0f}",
+        xerr: Optional[pd.Series] = None,
+        file_name: Optional[str] = None,
+    ) -> Path:
         """
-        Count bar plot
-        :param data: initial dataframe
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        :param order: list of orders values
+        Single-series bar chart with value labels at the end of each bar
+        :param data: series, index = categories, values = bar lengths (plotted in given order)
+        :param horizontal: horizontal bars (better for long category names)
+        :param xerr: optional error bars (same index as data)
         """
-        plt.close("all")
-        fig, ax = plt.subplots(figsize=(20, 9))
-        sns.countplot(x=data, ax=ax, order=order)
-        [
-            ax.bar_label(cont, padding=10, fontsize=15, rotation=self.bar_rotation)
-            for cont in ax.containers
-        ]
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        plt.xticks(rotation=self.x_rotation, fontsize=self.x_fontsize)
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
-        plt.savefig(
-            f"{self.path}/count_bar_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
+        height = max(3.5, 0.38 * len(data)) if horizontal else 4.5
+        fig, ax = plt.subplots(figsize=(9, height))
+        labels = data.index.astype(str)
+        if horizontal:
+            bars = ax.barh(labels, data.values, color=BLUE, height=0.65, xerr=xerr,
+                           error_kw={"ecolor": INK_SECONDARY, "lw": 1, "capsize": 3})
+            ax.invert_yaxis()
+            ax.grid(axis="y", visible=False)
+            ax.xaxis.set_major_formatter(THOUSANDS)
+        else:
+            bars = ax.bar(labels, data.values, color=BLUE, width=0.7)
+            ax.grid(axis="x", visible=False)
+            ax.yaxis.set_major_formatter(THOUSANDS)
+            if len(data) > 8:
+                plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
+        ax.bar_label(bars, labels=[label_fmt.format(v) for v in data.values],
+                     padding=3, fontsize=8, color=INK_SECONDARY)
+        ax.set(title=title, xlabel=xlabel, ylabel=ylabel)
+        ax.margins(x=0.08 if horizontal else 0.02, y=0.02 if horizontal else 0.1)
+        return self._save(fig, file_name or f"bar_{title}")
 
-    def bar_plot(
-        self,
-        column_x: pd.DataFrame,
-        column_y: pd.DataFrame,
-        column_x_name: str,
-        column_y_name: str,
-        column_hue: str = None,
-        order_x: List = None,
-    ) -> None:
-        """
-        Bar plot
-        :param column_x: initial dataframe x
-        :param column_y: initial dataframe y
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        :param column_hue: column name hue
-        :param order_x: list of orders values
-        """
-        plt.close("all")
-        fig, ax = plt.subplots(figsize=(20, 9))
-        sns.barplot(
-            x=column_x, y=column_y, hue=column_hue, order=order_x, ax=ax, errorbar=None
-        )
-        [
-            ax.bar_label(
-                cont,
-                padding=10,
-                fmt="%d",
-                fontsize=self.bar_fontsize,
-                rotation=self.bar_rotation,
-            )
-            for cont in ax.containers
-        ]
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        if column_hue is not None and self.column_huge_name is not None:
-            plt.legend(title=self.column_huge_name, loc=self.legend_loc)
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
-        plt.xticks(rotation=self.x_rotation, fontsize=15)
-        plt.savefig(
-            f"{self.path}/bar_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
+    def distribution(self, values: pd.Series, title: str, xlabel: str) -> Path:
+        """Histogram on the raw scale next to the same data on a log1p scale."""
+        fig, (ax_raw, ax_log) = plt.subplots(1, 2, figsize=(11, 4))
+        ax_raw.hist(values, bins=80, color=BLUE)
+        ax_raw.set(title="Raw scale", xlabel=xlabel, ylabel="Number of ads")
+        ax_log.hist(np.log1p(values), bins=60, color=BLUE)
+        ax_log.set(title="log(1 + x) scale", xlabel=f"log(1 + {xlabel})", ylabel="Number of ads")
+        for ax in (ax_raw, ax_log):
+            ax.yaxis.set_major_formatter(THOUSANDS)
+            ax.grid(axis="x", visible=False)
+        fig.suptitle(title, x=0.01, ha="left", fontweight="bold", fontsize=13)
+        fig.tight_layout()
+        return self._save(fig, f"distribution_{title}")
 
-    def line_plot(
-        self,
-        column_x: pd.DataFrame,
-        column_y: pd.DataFrame,
-        column_hue: str,
-        column_x_name: str,
-        column_y_name: str,
-    ) -> None:
-        """
-        Line plot
-        :param column_x: initial column dataframe x
-        :param column_y: initial column dataframe y
-        :param column_hue: column name hue
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        """
-        plt.close("all")
-        fig, ax = plt.subplots(figsize=(20, 9))
-        sns.lineplot(
-            x=column_x,
-            y=column_y,
-            hue=column_hue,
-            palette=sns.color_palette("crest"),
-            estimator=None,
-            lw=1,
-            markers=True,
-            ax=ax,
+    def median_line(
+        self, x: pd.Series, y: pd.Series, title: str, xlabel: str, ylabel: str, bins: int = 20
+    ) -> Path:
+        """Median of y per quantile bin of x, with the interquartile range as a band."""
+        binned = pd.qcut(x, q=bins, duplicates="drop")
+        grouped = y.groupby(binned, observed=True)
+        stats_df = pd.DataFrame(
+            {
+                "x": x.groupby(binned, observed=True).median(),
+                "median": grouped.median(),
+                "q1": grouped.quantile(0.25),
+                "q3": grouped.quantile(0.75),
+            }
         )
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
+        fig, ax = plt.subplots(figsize=(9, 4.5))
+        ax.fill_between(stats_df["x"], stats_df["q1"], stats_df["q3"], color=BLUE, alpha=0.15, lw=0,
+                        label="Interquartile range")
+        ax.plot(stats_df["x"], stats_df["median"], color=BLUE, lw=2, marker="o", ms=4, label="Median")
+        ax.set(title=title, xlabel=xlabel, ylabel=ylabel)
+        ax.yaxis.set_major_formatter(THOUSANDS)
+        ax.legend(loc="upper left")
+        return self._save(fig, f"line_{title}")
 
-        for x, y in zip(column_x, column_y):
-            plt.text(x=x, y=y - 150, s="{:.0f}".format(y), color="purple")
+    def heatmap_corr(self, corr: pd.DataFrame, title: str) -> Path:
+        """Correlation matrix with a diverging map centred on 0 (lower triangle only)."""
+        mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(corr, mask=mask, cmap=DIVERGING, vmin=-1, vmax=1, center=0, annot=True, fmt=".2f",
+                    annot_kws={"size": 7}, linewidths=1, linecolor="white", square=True,
+                    cbar_kws={"shrink": 0.7, "label": "Spearman correlation"}, ax=ax)
+        ax.grid(False)
+        ax.set_title(title)
+        return self._save(fig, f"heatmap_{title}")
 
-        if column_hue is not None and self.column_huge_name is not None:
-            plt.legend(title=self.column_huge_name, loc=self.legend_loc)
+    def predicted_vs_actual(self, y_true, y_pred, title: str) -> Path:
+        """Scatter on log-log axes with the perfect-prediction diagonal."""
+        y_true, y_pred = np.asarray(y_true) + 1, np.clip(np.asarray(y_pred), 0, None) + 1
+        fig, ax = plt.subplots(figsize=(6.5, 6))
+        ax.scatter(y_true, y_pred, s=8, alpha=0.25, color=BLUE, edgecolors="none", label="Test ads")
+        limits = [1, max(y_true.max(), y_pred.max())]
+        ax.plot(limits, limits, color=ORANGE, lw=2, label="Perfect prediction")
+        ax.set(xscale="log", yscale="log", title=title, xlabel="Actual visits + 1", ylabel="Predicted visits + 1")
+        ax.legend(loc="upper left")
+        return self._save(fig, f"scatter_{title}")
 
-        plt.rcParams["figure.autolayout"] = True
-        plt.xticks(np.arange(1, 13))
-        plt.savefig(
-            f"{self.path}/line_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def count_pie_plot(
-        self,
-        data: pd.DataFrame,
-        column_y: str,
-        explode: Tuple,
-        colors: List,
-        sub_title: str,
-    ) -> None:
-        """
-        Count pie plot
-        :param data: initial dataframe
-        :param column_y: column name
-        :param explode: tuple explode values
-        :param colors: list of colors
-        :param sub_title: sub title
-        """
-        plt.close("all")
-        fig, ax = plt.subplots()
-        data.plot.pie(
-            y=column_y,
-            figsize=(5, 5),
-            explode=explode,
-            labels=None,
-            autopct="%.2f%%",
-            pctdistance=0.85,
-            colors=colors,
-            startangle=90,
-            ax=ax,
-        )
-
-        centre_circle = plt.Circle((0, 0), 0.70, fc="white")
-        fig = plt.gcf()
-        fig.gca().add_artist(centre_circle)
-
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
-        ax.text(
-            0.0,
-            0.0,
-            sub_title,
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=24,
-        )
-        ax.axis("equal")
-        plt.tight_layout()
-        plt.savefig(
-            f"{self.path}/count_pie_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def distribution_kdeplot(
-        self, data: pd.DataFrame, column_x_name: str, column_y_name: str
-    ) -> None:
-        """
-        Distribution kdeplot
-        :param data: initial dataframe
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        """
-        plt.close("all")
-        sns.kdeplot(data=data, color="Red", fill=True)
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
-        plt.savefig(
-            f"{self.path}/distribution_kdeplot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def heat_map_corr(self, data: pd.DataFrame) -> None:
-        """
-        Heat map correlation
-        :param data: initial dataframe
-        """
-        plt.close("all")
-        plt.figure(figsize=(20, 9))
-        plt.title(self.title, y=1.05, size=15)
-        sns.heatmap(
-            data,
-            square=True,
-            cmap="RdYlBu",
-            linecolor="white",
-            annot=True,
-            annot_kws={'size': 5}
-        )
-        plt.tight_layout()
-        plt.savefig(
-            f"{self.path}/heat_map_corr_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def count_scatter(
-        self,
-        column_x: pd.DataFrame,
-        column_y: pd.DataFrame,
-        column_x_name: str,
-        column_y_name: str,
-    ) -> None:
-        """
-        Count Scatter
-        :param column_x: initial dataframe x
-        :param column_y: initial dataframe y
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        """
-        plt.close("all")
-        plt.figure(figsize=(10, 6))
-        plt.scatter(column_x, column_y, c="m")
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        plt.title(self.title)
-        plt.savefig(
-            f"{self.path}/count_scatter_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def count_lmplot(
-        self,
-        data: pd.DataFrame,
-        column_x: str,
-        column_y: str,
-        column_x_name: str,
-        column_y_name: str,
-    ) -> None:
-        """
-        Count Lmplot
-        :param data: initial dataframe
-        :param column_x: column x
-        :param column_y: column y
-        :param column_x_name: column name x
-        :param column_y_name: column name y
-        """
-        plt.close("all")
-        sns.lmplot(
-            x=column_x,
-            y=column_y,
-            hue=self.column_huge_name,
-            data=data,
-            height=6,
-            aspect=1.5,
-        )
-        plt.title(self.title)
-        plt.xlabel(column_x_name)
-        plt.ylabel(column_y_name)
-        plt.xticks(fontsize=9)
-        plt.yticks(fontsize=6)
-        plt.savefig(
-            f"{self.path}/count_lmplot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def heatmap_nulls(self, data: pd.DataFrame) -> None:
-        """
-        Heat map nulls
-        :param data: initial dataframe
-        """
-        plt.close("all")
-        ax = plt.axes()
-        ax.xaxis.tick_top()
-        sns.heatmap(data.isnull(), cbar=False, ax=ax)
-        plt.title(self.title)
-        plt.xlabel("Column")
-        plt.ylabel("Quantity")
-        plt.xticks(fontsize=9)
-        plt.yticks(fontsize=6)
-        plt.savefig(
-            f"{self.path}/heatmap_nulls_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def facet_grid(self, data: pd.DataFrame, col: str, x: str) -> None:
-        """
-        Facet grid
-        :param data: initial dataframe
-        :param col: column name y
-        :param x: column name x
-        """
-        plt.close("all")
-        with sns.plotting_context('paper', font_scale=0.8):
-            p = sns.FacetGrid(data, col=col, height=3, aspect=0.5, col_wrap=5, margin_titles=True)
-        p.map(sns.kdeplot, x)
-        plt.savefig(
-            f"{self.path}/facet_grid_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def comparison_plot(
-        self, data: pd.DataFrame, x: str, y_real: str, y_predicted: str
-    ):
-        ax = data.plot(x=x, y=y_real)
-        plt.xlabel(x)
-        plt.ylabel(f"mean {y_real}")
-        plt.title(self.title, fontsize=15).set_position([0.5, 1.05])
-        data.plot(x=x, y=y_predicted, color="Red", ax=ax)
-        plt.savefig(
-            f"{self.path}/comparison_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
-
-    def standard_deviation_plot(self, data: pd.DataFrame, column_name: str) -> None:
-        """
-        Generate Plot STD
-        :param data: initial dataframe
-        :param column_name: column name
-        """
-        x_axis = data[column_name]
-        y_axis = norm.pdf(x_axis, data[column_name].mean(), data[column_name].std())
-
-        fig, (ax) = plt.subplots()
-        ax.set(title=self.title, ylabel="average", xlabel="index values")
-        plt.plot(
-            x_axis,
-            y_axis,
-            marker="o",
-            markerfacecolor="blue",
-            markersize=5,
-            color="skyblue",
-            linestyle="none",
-        )
-        plt.savefig(
-            f"{self.path}/standard_deviation_plot_{self.title.lower().replace(' ', '_')}.png",
-            bbox_inches="tight",
-        )
+    def residuals(self, y_true, y_pred, title: str) -> Path:
+        """Log residuals against log predictions; a flat cloud around 0 means no systematic bias."""
+        log_pred = np.log1p(np.clip(np.asarray(y_pred), 0, None))
+        residual = np.log1p(np.asarray(y_true)) - log_pred
+        fig, ax = plt.subplots(figsize=(9, 4.5))
+        ax.scatter(log_pred, residual, s=8, alpha=0.25, color=BLUE, edgecolors="none")
+        ax.axhline(0, color=ORANGE, lw=2)
+        ax.set(title=title, xlabel="log(1 + predicted visits)", ylabel="log residual (actual - predicted)")
+        return self._save(fig, f"residuals_{title}")

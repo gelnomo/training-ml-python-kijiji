@@ -6,16 +6,11 @@ class OutputTypeEnum(Enum):
     CONSOLE = 2
 
 
-class OptionEnum(Enum):
-    YES = 1
-    NO = 0
-
-
 class OutlierTypeEnum(Enum):
     Z_SCORE = 1
-    Z_R_SCORE = 2
+    ROBUST_Z_SCORE = 2
     IQR = 3
-    WINSORIZATION = 4
+    PERCENTILE = 4
     DBSCAN = 5
     ISOLATION_FOREST = 6
 

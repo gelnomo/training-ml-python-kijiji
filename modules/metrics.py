@@ -1,52 +1,24 @@
+from typing import Dict
+
 import numpy as np
-import pandas as pd
 from sklearn import metrics
-from typing import List, Tuple
 
 
-def get_metrics(
-    target: str, data: pd.DataFrame, predict_value: str, exclude_col_metric: List
-) -> Tuple[float, float, float]:
+def regression_metrics(y_true, y_pred) -> Dict[str, float]:
     """
-    Generate metrics MAE, MSE, RMSE
-    :param target:
-    :param data:
-    :param predict_value:
-    :param exclude_col_metric:
-    :return:
+    Standard regression metrics on the original scale of the target
+    :param y_true: observed values
+    :param y_pred: predicted values
+    :return: dict with MAE, MedAE, RMSE, R2 and R2 on log1p scale
     """
-    y_orig = data.to_frame().transpose()
-    y_orig.drop(columns=exclude_col_metric, inplace=True)
-    y_predict = y_orig.copy()
-    y_predict[target] = predict_value
-    y_orig = y_orig.to_numpy()[0].tolist()
-    y_predict = y_predict.to_numpy()[0].tolist()
-
-    # Result of MAE
-    mae = metrics.mean_absolute_error(y_orig, y_predict)
-    # Result of MSE
-    mse = metrics.mean_squared_error(y_orig, y_predict)
-    # Result of RMSE
-    r2s = np.sqrt(metrics.mean_squared_error(y_orig, y_predict))
-
-    return mae, mse, r2s
-
-
-def metric_variance(data: pd.DataFrame, column_name: str) -> float:
-    """
-    Get variance value by column
-    :param data: initial dataframe
-    :param column_name: column name to get the variance
-    :return: float value
-    """
-    return data[column_name].var()
-
-
-def metric_standard_deviation(data: pd.DataFrame, column_name: str) -> float:
-    """
-    Get std value by column
-    :param data: initial dataframe
-    :param column_name: column name to get the standard deviation
-    :return: float value
-    """
-    return data[column_name].std()
+    y_true = np.asarray(y_true, dtype=float)
+    y_pred = np.clip(np.asarray(y_pred, dtype=float), 0, None)
+    return {
+        "MAE": metrics.mean_absolute_error(y_true, y_pred),
+        "MedAE": metrics.median_absolute_error(y_true, y_pred),
+        "RMSE": float(np.sqrt(metrics.mean_squared_error(y_true, y_pred))),
+        "R2": metrics.r2_score(y_true, y_pred),
+        # Visits are heavy-tailed: R2 on log scale tells how well the order of
+        # magnitude is captured, which the raw R2 (dominated by a few viral ads) hides.
+        "R2_log": metrics.r2_score(np.log1p(y_true), np.log1p(y_pred)),
+    }
