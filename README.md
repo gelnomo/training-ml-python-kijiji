@@ -11,10 +11,10 @@ The global connection to the internet has become an essential part of our daily 
 10. [Conclusion](#5)
 
 >**Group 6**
+>- Erwin Mongui (883945)
 >- Camilo Florez (888810)
 >- Yasar Mansuri (884738)
 >- Syed Zumair (885081)
->- Erwin Mongui (883945)
 
 
 [Back to Table of Contents](#0.1)
