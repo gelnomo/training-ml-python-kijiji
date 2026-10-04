@@ -1,147 +1,77 @@
 import argparse
 import sys
+import traceback
 import warnings
-from modules.enums import OutputTypeEnum, OptionEnum, PrintColorEnum
+from typing import List, Optional
+
 from modules.analyze import AnalyzeData
+from modules.cleansing import clean_data
+from modules.enums import OutputTypeEnum, PrintColorEnum
+from modules.extraction import read_visits
 from modules.training import TrainingData
-from typing import List
+
+OUTPUT_CHOICES = {"file": OutputTypeEnum.FILE, "f": OutputTypeEnum.FILE,
+                  "console": OutputTypeEnum.CONSOLE, "c": OutputTypeEnum.CONSOLE}
 
 
-def read_arguments() -> List:
+def read_arguments(argv: Optional[List[str]] = None) -> argparse.Namespace:
     """
-    Read all arguments from console
-    :return: List of arguments
+    Read arguments from the console
+    :param argv: argument list (defaults to sys.argv)
+    :return: parsed arguments, with output options converted to OutputTypeEnum
     """
-    parser = argparse.ArgumentParser(description="Predict Kijiji Car Price")
-    parser.add_argument(
-        "--analyze",
-        dest="analyze",
-        type=str,
-        help="Generating results (File/Console)",
-        choices=["file", "f", "console", "c"],
-    )
-    parser.add_argument(
-        "--training",
-        dest="training",
-        type=str,
-        choices=["file", "f", "console", "c"],
-        help="Generating results (File/Console)",
-    )
-    parser.add_argument(
-        "--normalization",
-        dest="normalization",
-        type=str,
-        choices=["yes", "true", "t", "y", "no", "false", "f", "n"],
-        help="Normalization (yes/no)",
-    )
-    parser.add_argument(
-        "--storage_model",
-        dest="storage_model",
-        type=str,
-        choices=["yes", "true", "t", "y", "no", "false", "f", "n"],
-        help="Normalization (yes/no)",
-    )
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description="Predict the number of visits of Kijiji car ads")
+    parser.add_argument("--analyze", choices=OUTPUT_CHOICES, help="Run the EDA, report to file or console")
+    parser.add_argument("--training", choices=OUTPUT_CHOICES, help="Train and evaluate models, report to file/console")
+    parser.add_argument("--save-model", action="store_true", help="Save the best pipeline to reports/models")
+    parser.add_argument("--no-plots", action="store_true", help="Skip chart generation")
+    parser.add_argument("--fast", action="store_true", help="Smaller models and fewer CV folds (quick check)")
+    parser.add_argument("--sample", type=int, help="Use a random sample of N ads (quick experiments)")
+    args = parser.parse_args(argv)
 
-    if args.analyze and args.analyze.lower() in ["file", "f"]:
-        args.analyze = OutputTypeEnum.FILE
-    elif args.analyze and args.analyze.lower() in ["console", "c"]:
-        args.analyze = OutputTypeEnum.CONSOLE
+    if not (args.analyze or args.training):
+        parser.error("choose at least one of --analyze or --training")
 
-    if args.training and args.training.lower() in ["file", "f"]:
-        args.training = OutputTypeEnum.FILE
-    elif args.training and args.training.lower() in ["console", "c"]:
-        args.training = OutputTypeEnum.CONSOLE
-
-    if args.normalization and args.normalization.lower() in [
-        "yes",
-        "true",
-        "t",
-        "y",
-    ]:
-        args.normalization = OptionEnum.YES
-    else:
-        args.normalization = OptionEnum.NO
-
-    if args.storage_model and args.storage_model.lower() in [
-        "yes",
-        "true",
-        "t",
-        "y",
-    ]:
-        args.storage_model = OptionEnum.YES
-    else:
-        args.storage_model = OptionEnum.NO
-
+    args.analyze = OUTPUT_CHOICES.get(args.analyze)
+    args.training = OUTPUT_CHOICES.get(args.training)
     return args
+
+
+def section(title: str, color: str) -> None:
+    print(color, "-" * 50)
+    print(PrintColorEnum.BOLD, color, title, PrintColorEnum.END)
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    warnings.filterwarnings("ignore", category=FutureWarning)
+    args = read_arguments(argv)
+    plots = not args.no_plots
+
+    raw = read_visits()
+    if args.sample:
+        raw = raw.sample(n=min(args.sample, len(raw)), random_state=0)
+
+    if args.analyze:
+        section("ANALYZE DATA:", PrintColorEnum.PURPLE)
+        df, _ = AnalyzeData(args.analyze, plots=plots).process(raw)
+    else:
+        df, _ = clean_data(raw)
+
+    if args.training:
+        section("TRAINING DATA:", PrintColorEnum.CYAN)
+        result = TrainingData(df, args.training, save_model=args.save_model, plots=plots, fast=args.fast).process()
+        print(PrintColorEnum.CYAN, f"Best model: {result['best_name']}", PrintColorEnum.END)
+        print(result["test_metrics"].round(3))
+
+    print(PrintColorEnum.GREEN, PrintColorEnum.BOLD, "All done!", PrintColorEnum.END, "\U0001F64C")
+    return 0
 
 
 if __name__ == "__main__":
     try:
-        # Ignore warning messages
-        warnings.filterwarnings("ignore")
-        df, unique_cities, standard_normalization = None, None, None
-
-        args = read_arguments()
-        if args.analyze:
-            print(PrintColorEnum.PURPLE, "-" * 50)
-            print(
-                PrintColorEnum.BOLD,
-                PrintColorEnum.PURPLE,
-                "ANALYZE DATA:",
-                PrintColorEnum.END,
-            )
-
-            analyze_data = AnalyzeData(args.analyze, args.normalization)
-            df, unique_cities, standard_normalization = analyze_data.process()
-            del analyze_data
-
-            print(PrintColorEnum.PURPLE, "-" * 50)
-
-        if args.analyze and args.training:
-            print(PrintColorEnum.CYAN, "-" * 50)
-            print(
-                PrintColorEnum.BOLD,
-                PrintColorEnum.CYAN,
-                "TRAINING DATA:",
-                PrintColorEnum.END,
-            )
-
-            training_data = TrainingData(
-                df, unique_cities, args.training, args.storage_model
-            )
-            training_data.process(standard_normalization)
-            del training_data
-
-            print(PrintColorEnum.CYAN, "-" * 50)
-
-        del df
-        del unique_cities
-        del standard_normalization
-
-        print(
-            PrintColorEnum.GREEN,
-            PrintColorEnum.BOLD,
-            "All done!",
-            PrintColorEnum.END,
-            "\U0001F64C",
-        )
+        sys.exit(main())
     except Exception as ex:
-        print(
-            PrintColorEnum.RED,
-            PrintColorEnum.BOLD,
-            "Error!!",
-            "\U0001F525",
-            PrintColorEnum.END,
-        )
-
-        exception_type, exception_object, exception_traceback = sys.exc_info()
-        filename = exception_traceback.tb_frame.f_code.co_filename
-        line_number = exception_traceback.tb_lineno
-
+        print(PrintColorEnum.RED, PrintColorEnum.BOLD, "Error!!", "\U0001F525", PrintColorEnum.END)
         print("\tDescription: ", PrintColorEnum.RED, ex, PrintColorEnum.END)
-        print(
-            "\tException type: ", PrintColorEnum.RED, exception_type, PrintColorEnum.END
-        )
-        print("\tFile name: ", PrintColorEnum.RED, filename, PrintColorEnum.END)
-        print("\tLine number: ", PrintColorEnum.RED, line_number, PrintColorEnum.END)
+        traceback.print_exc()
+        sys.exit(1)

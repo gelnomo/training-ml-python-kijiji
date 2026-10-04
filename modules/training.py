@@ -1,357 +1,154 @@
+"""Model selection with cross-validation, held-out evaluation and model persistence."""
+
+import json
+import time
+from typing import Dict
+
 import joblib
 import numpy as np
 import pandas as pd
-from typing import List
+import sklearn
+from sklearn.inspection import permutation_importance
+from sklearn.metrics import make_scorer, r2_score
+from sklearn.model_selection import KFold, cross_validate, train_test_split
 
-from sklearn.preprocessing import StandardScaler
-
-from modules.enums import OutputTypeEnum, OptionEnum
-from modules.utils import dummify, undummify, storage_sqlite
-from tqdm import tqdm
+from modules.config import CV_FOLDS, MODELS_DIR, RANDOM_STATE, TARGET, TEST_SIZE
+from modules.enums import OutputTypeEnum
+from modules.features import FEATURES
+from modules.metrics import regression_metrics
+from modules.models import get_models
 from modules.output_data import OutputResult
-from models.gradient_boostring_regressor.train_model import (
-    train_gradient_boosting_regressor,
-)
-from models.linear_regression.train_model import train_linear_regression
-from modules.metrics import get_metrics
-from models.random_forest_regressor.train_model import train_random_forest_regressor
+from modules.utils import storage_sqlite
 from modules.visualization import Visualization
 
 
+def _r2_log(y_true, y_pred):
+    return r2_score(np.log1p(y_true), np.log1p(np.clip(y_pred, 0, None)))
+
+
+SCORING = {
+    "MAE": "neg_mean_absolute_error",
+    "R2": "r2",
+    "R2_log": make_scorer(_r2_log),
+}
+
+
 class TrainingData:
-    train_size = 0.6
-    random_state = 42
+    """Compare candidate models, pick the best by CV and evaluate it once on the test set."""
 
-    # Score train/test Columns
-    columns_score = [
-        "lr score train",
-        "lr score test",
-        "gbr score train",
-        "gbr score test",
-        "rfr score train",
-        "rfr score test",
-    ]
+    def __init__(self, data: pd.DataFrame, output: OutputTypeEnum, save_model: bool = False,
+                 plots: bool = True, fast: bool = False):
+        self.data = data
+        self.output_result = OutputResult(output)
+        self.save_model = save_model
+        self.graphs = Visualization() if plots else None
+        self.fast = fast
 
-    # Metric Columns
-    columns_metrics = [
-        "predicted train size",
-        "predicted random state",
-        "predicted lr",
-        "predicted lr MAE",
-        "predicted lr MSE",
-        "predicted lr R2S",
-        "predicted gbr",
-        "predicted gbr MAE",
-        "predicted gbr MSE",
-        "predicted gbr R2S",
-        "predicted rfr",
-        "predicted rfr MAE",
-        "predicted rfr MSE",
-        "predicted rfr R2S",
-    ]
+    def _report(self, title: str, content) -> None:
+        self.output_result.title = title
+        self.output_result.process(content)
 
-    exclude_columns = ["visit", "city"]
-
-    def __init__(
-            self,
-            data: pd.DataFrame,
-            unique_cities: List,
-            output: OutputTypeEnum,
-            storage_model: OptionEnum,
-    ):
-        self.output = output
-        self.data = data.copy()
-        self.unique_cities = unique_cities
-        self.general_graphs = Visualization()
-        self.storage_model = storage_model
-
-    def __del__(self):
-        del self.general_graphs
-        del self.data
-
-    def __predict(self, model: object, x_find: str) -> str:
-        """
-        Create a prediction
-        :param model: model to check the prediction
-        :param x_find: value to predict
-        :return: value predicted
-        """
-        if model is None:
-            return None
-        x_find = x_find.to_frame().transpose()
-        return model.predict(x_find)
-
-    def __get_percentage_use(self, data: pd.DataFrame) -> None:
-        """
-        Get percentage model used
-        :param data: initial dataframe
-        """
-        output_result = OutputResult(self.output)
-        output_result.title = "Get Percentage use"
-
-        df_result_model = data.groupby(by=["model_predicted"], as_index=False)[
-            "city"
-        ].count()
-        df_result_model["model_predicted%"] = (df_result_model["city"] * 100) / len(
-            data
-        )
-        output_result.process(df_result_model)
-
-    def __get_mean_visit_predicted_by_model(
-            self, data: pd.DataFrame, model: str
-    ) -> None:
-        """
-        Get mean visit predicted by model
-        :param data: initial dataframe
-        :param model: model GBR, LR, RFR
-        """
-        print(f"Generating Graph: {model} Mean visit vs Mean visit predicted")
-
-        result = (
-            data[data["model_predicted"] == model]
-            .groupby(by="cyear", as_index=False)["visit", "visit_predicted"]
-            .mean()
-        )
-        self.general_graphs.title = f"{model} Mean visit vs Mean visit predicted"
-        self.general_graphs.comparison_plot(
-            result, "cyear", "visit", "visit_predicted"
-        )
-
-    def __get_mean_visit_predicted(self, data: pd.DataFrame) -> None:
-        """
-        Generate graph mean visit vs mean visit predicted
-        :param data: initial dataframe
-        """
-        print("Generating Graph: Mean visit vs Mean visit predicted")
-
-        result = data.groupby(by="cyear", as_index=False)[
-            "visit", "visit_predicted"
-        ].mean()
-        self.general_graphs.title = "Mean visit vs Mean visit predicted"
-        self.general_graphs.comparison_plot(
-            result, "cyear", "visit", "visit_predicted"
-        )
-
-    def process(self, standard_normalization: StandardScaler):
-        """
-        Predict visits
-        :param standard_normalization: visit standard scaler
-        """
-        dict_df_transform = {}
-        exclude_col = self.exclude_columns + self.columns_score
-        exclude_col_metric = ["city"] + self.columns_metrics + self.columns_score
-
-        for item in self.unique_cities:
-            dict_df_transform[item] = self.data[self.data["city"] == item].copy()
-            dict_df_transform[item].drop_duplicates(inplace=True)
-
-        for item in tqdm(self.unique_cities, desc="City"):
-            columns_names = (
-                dict_df_transform[item]
-                .drop(columns=self.exclude_columns)
-                .columns.values
+    def _cross_validate(self, models: Dict, x_train: pd.DataFrame, y_train: pd.Series) -> pd.DataFrame:
+        folds = KFold(n_splits=3 if self.fast else CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
+        rows = []
+        for name, model in models.items():
+            print(f"Cross-validating: {name}")
+            start = time.perf_counter()
+            scores = cross_validate(model, x_train, y_train, cv=folds, scoring=SCORING)
+            rows.append(
+                {
+                    "model": name,
+                    "MAE": -scores["test_MAE"].mean(),
+                    "MAE_std": scores["test_MAE"].std(),
+                    "R2": scores["test_R2"].mean(),
+                    "R2_log": scores["test_R2_log"].mean(),
+                    "seconds": round(time.perf_counter() - start, 1),
+                }
             )
-            dict_df_transform[item][[self.columns_score]] = np.nan
+        return pd.DataFrame(rows).set_index("model").sort_values("MAE")
 
-            lr, train_score, test_score = train_linear_regression(
-                dict_df_transform[item],
-                "visit",
-                exclude_col,
-                self.train_size,
-                self.random_state,
-                self.storage_model,
-            )
-            if train_score:
-                dict_df_transform[item]["lr score train"] = train_score
-            if test_score:
-                dict_df_transform[item]["lr score test"] = test_score
+    def _importance(self, model, x_test: pd.DataFrame, y_test: pd.Series) -> pd.Series:
+        print("Computing: permutation importance")
+        sample = x_test.sample(n=min(3000, len(x_test)), random_state=RANDOM_STATE)
+        result = permutation_importance(model, sample, y_test.loc[sample.index], scoring="neg_mean_absolute_error",
+                                        n_repeats=3 if self.fast else 5, random_state=RANDOM_STATE)
+        return pd.Series(result.importances_mean, index=sample.columns).sort_values(ascending=False)
 
-            gbr, train_score, test_score = train_gradient_boosting_regressor(
-                dict_df_transform[item],
-                "visit",
-                exclude_col,
-                self.train_size,
-                self.random_state,
-                self.storage_model,
-            )
-            if train_score:
-                dict_df_transform[item]["gbr score train"] = train_score
-            if test_score:
-                dict_df_transform[item]["gbr score test"] = test_score
-
-            rfr, train_score, test_score = train_random_forest_regressor(
-                dict_df_transform[item],
-                "visit",
-                exclude_col,
-                self.train_size,
-                self.random_state,
-                self.storage_model,
-            )
-            if train_score:
-                dict_df_transform[item]["rfr score train"] = train_score
-            if test_score:
-                dict_df_transform[item]["rfr score test"] = test_score
-
-            dict_df_transform[item][self.columns_metrics] = np.nan
-
-            for index, row in tqdm(
-                    dict_df_transform[item].iterrows(),
-                    desc=f"{item}: {len(dict_df_transform[item])}",
-                    leave=False,
-            ):
-                predicted_lr = self.__predict(
-                    lr, dict_df_transform[item][columns_names].loc[index]
-                )
-                predicted_gbr = self.__predict(
-                    gbr, dict_df_transform[item][columns_names].loc[index]
-                )
-                predicted_rfr = self.__predict(
-                    rfr, dict_df_transform[item][columns_names].loc[index]
-                )
-
-                dict_df_transform[item]["predicted train size"] = self.train_size
-                dict_df_transform[item]["predicted random state"] = self.random_state
-
-                if predicted_lr is not None:
-                    dict_df_transform[item]["predicted lr"].loc[[index]] = predicted_lr
-                    mae, mse, r2s = get_metrics(
-                        "visit",
-                        dict_df_transform[item].loc[index],
-                        predicted_lr,
-                        exclude_col_metric,
-                    )
-                    dict_df_transform[item]["predicted lr MAE"].loc[[index]] = mae
-                    dict_df_transform[item]["predicted lr MSE"].loc[[index]] = mse
-                    dict_df_transform[item]["predicted lr R2S"].loc[[index]] = r2s
-
-                if predicted_gbr is not None:
-                    dict_df_transform[item]["predicted gbr"].loc[
-                        [index]
-                    ] = predicted_gbr
-                    mae, mse, r2s = get_metrics(
-                        "visit",
-                        dict_df_transform[item].loc[index],
-                        predicted_gbr,
-                        exclude_col_metric,
-                    )
-                    dict_df_transform[item]["predicted gbr MAE"].loc[[index]] = mae
-                    dict_df_transform[item]["predicted gbr MSE"].loc[[index]] = mse
-                    dict_df_transform[item]["predicted gbr R2S"].loc[[index]] = r2s
-
-                if predicted_rfr is not None:
-                    dict_df_transform[item]["predicted rfr"].loc[
-                        [index]
-                    ] = predicted_rfr
-                    mae, mse, r2s = get_metrics(
-                        "visit",
-                        dict_df_transform[item].loc[index],
-                        predicted_rfr,
-                        exclude_col_metric,
-                    )
-                    dict_df_transform[item]["predicted rfr MAE"].loc[[index]] = mae
-                    dict_df_transform[item]["predicted rfr MSE"].loc[[index]] = mse
-                    dict_df_transform[item]["predicted rfr R2S"].loc[[index]] = r2s
-
-            del lr
-            del gbr
-            del rfr
-
-        for item in self.unique_cities:
-            dict_df_transform[item] = undummify(dict_df_transform[item])
-
-        df_result = pd.concat(dict_df_transform.values())
-        del dict_df_transform
-
-        df_result.drop_duplicates(inplace=True)
-        df_result.reset_index(drop=True, inplace=True)
-
-        df_result["visit_predicted"] = np.where(
-            (df_result["predicted rfr R2S"] < df_result["predicted lr R2S"])
-            & (df_result["predicted rfr R2S"] < df_result["predicted gbr R2S"]),
-            df_result["predicted rfr"],
-            np.where(
-                (df_result["predicted lr R2S"] < df_result["predicted rfr R2S"])
-                & (df_result["predicted lr R2S"] < df_result["predicted gbr R2S"]),
-                df_result["predicted lr"],
-                df_result["predicted gbr"],
-            ),
-        )
-        df_result["model_predicted"] = np.where(
-            (df_result["predicted rfr R2S"] < df_result["predicted lr R2S"])
-            & (df_result["predicted rfr R2S"] < df_result["predicted gbr R2S"]),
-            "RFR",
-            np.where(
-                (df_result["predicted lr R2S"] < df_result["predicted rfr R2S"])
-                & (df_result["predicted lr R2S"] < df_result["predicted gbr R2S"]),
-                "LR",
-                "GBR",
-            ),
-        )
-
-        self.__get_percentage_use(df_result)
-        self.__get_mean_visit_predicted_by_model(df_result, "LR")
-        self.__get_mean_visit_predicted_by_model(df_result, "RFR")
-        self.__get_mean_visit_predicted_by_model(df_result, "GBR")
-
-        if standard_normalization:
-            df_result["visit"] = standard_normalization.inverse_transform(
-                df_result[["visit"]]
-            )
-            df_result["visit_predicted"] = standard_normalization.inverse_transform(
-                df_result[["visit_predicted"]]
-            )
-
-        for item in self.unique_cities:
-            for j in range(2022, 2024):
-                if j == 2022:
-                    n = 9
-                else:
-                    n = 1
-
-                for i in range(n, 12):
-                    data_set_visits = pd.DataFrame({
-                        "cmonth": i,
-                        "cyear": j,
-                    }, index=[0]
-                    )
-                    predict_value = self.__predict_new_visits(data_set_visits, "GBR", item)
-                    temp_df = pd.DataFrame({
-                        "city": item,
-                        "cmonth": i,
-                        "cyear": j,
-                        "visit": predict_value,
-                    }, index=[df_result.index.max() + 1]
-                    )
-
-                df_result = df_result.append(temp_df)
-
-        self.__get_mean_visit_predicted(df_result)
-
-        for item in self.unique_cities:
-            self.__get_visit_predicted_by_city(item, df_result)
-
-        storage_sqlite(df_result, "PREDICTED")
-
-    def __get_visit_predicted_by_city(self, city, data: pd.DataFrame) -> None:
+    def process(self) -> Dict:
         """
-        Generate graph mean visit vs mean visit predicted
-        :param data: initial dataframe
+        Train, select and evaluate
+        :return: dict with CV table, test metrics, chosen model name and fitted pipeline
         """
-        print(f"Generating Graph: Mean visit vs Mean visit predicted [{city}]")
-
-        result = data[data["city"] == city].groupby(by="cyear", as_index=False)[
-            "visit", "visit_predicted"
-        ].mean()
-        self.general_graphs.title = f"Mean visit vs Mean visit predicted - {city}"
-        self.general_graphs.comparison_plot(
-            result, "cyear", "visit", "visit_predicted"
+        x, y = self.data[FEATURES], self.data[TARGET]
+        # Stratify on visit deciles so train and test share the same skewed distribution
+        strata = pd.qcut(np.log1p(y), q=10, labels=False, duplicates="drop")
+        x_train, x_test, y_train, y_test = train_test_split(
+            x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=strata
         )
+        self._report("Train / test sizes", {"train": len(x_train), "test": len(x_test)})
 
-    def __predict_new_visits(self, X_test, model_name, city):
+        models = get_models(fast=self.fast)
+        cv_results = self._cross_validate(models, x_train, y_train)
+        self._report("Cross-validation on the training set (mean of folds)", cv_results.round(3))
 
-        model = joblib.load(f"reports/job_lib/{model_name}_{city.replace('/', '-')}.joblib")
+        # Selection uses CV only; the test set is touched once, for the final estimate
+        best_name = cv_results.drop(index="Baseline (median)").index[0]
+        print(f"Fitting best model on the full training set: {best_name}")
+        best_model = models[best_name].fit(x_train, y_train)
+        baseline = models["Baseline (median)"].fit(x_train, y_train)
 
-        # Make predictions
-        y_pred = model.predict(X_test)
+        y_pred = best_model.predict(x_test)
+        test_metrics = pd.DataFrame(
+            {
+                best_name: regression_metrics(y_test, y_pred),
+                "Baseline (median)": regression_metrics(y_test, baseline.predict(x_test)),
+            }
+        ).T
+        self._report("Held-out test metrics", test_metrics.round(3))
 
-        return y_pred
+        predictions = x_test[["city", "make", "model", "price", "ad_age_days"]].copy()
+        predictions[TARGET] = y_test
+        predictions["visit_predicted"] = np.clip(y_pred, 0, None).round()
+        predictions["abs_error"] = (predictions[TARGET] - predictions["visit_predicted"]).abs()
+        by_city = predictions.groupby("city").agg(
+            ads=(TARGET, "size"), median_visits=(TARGET, "median"), MAE=("abs_error", "mean"),
+            median_abs_error=("abs_error", "median"),
+        ).sort_values("ads", ascending=False)
+        self._report("Test error by city", by_city.round(1))
+
+        importance = self._importance(best_model, x_test, y_test)
+        self._report("Permutation importance (MAE increase when a feature is shuffled)", importance.round(2))
+
+        if self.graphs:
+            self.graphs.bar(cv_results["MAE"], "Model comparison, cross-validated MAE (lower is better)",
+                            "Mean absolute error (visits)", "", horizontal=True, xerr=cv_results["MAE_std"])
+            self.graphs.predicted_vs_actual(y_test, y_pred, f"{best_name}: predicted vs actual visits (test set)")
+            self.graphs.residuals(y_test, y_pred, f"{best_name}: residuals (test set)")
+            self.graphs.bar(importance.head(12), "Most important features (permutation importance)",
+                            "Increase in MAE when shuffled (visits)", "", horizontal=True, label_fmt="{:,.1f}")
+
+        storage_sqlite(predictions.reset_index(names="row_id"), "PREDICTED")
+        if self.save_model:
+            self._save(best_model, best_name, test_metrics.loc[best_name].to_dict())
+
+        return {
+            "cv_results": cv_results,
+            "test_metrics": test_metrics,
+            "best_name": best_name,
+            "model": best_model,
+            "importance": importance,
+        }
+
+    def _save(self, model, name: str, metrics: Dict) -> None:
+        MODELS_DIR.mkdir(parents=True, exist_ok=True)
+        joblib.dump(model, MODELS_DIR / "visit_model.joblib")
+        metadata = {
+            "model": name,
+            "target": TARGET,
+            "features": FEATURES,
+            "test_metrics": {k: round(float(v), 4) for k, v in metrics.items()},
+            "scikit_learn_version": sklearn.__version__,
+            "trained_at": pd.Timestamp.now().isoformat(timespec="seconds"),
+        }
+        (MODELS_DIR / "visit_model.json").write_text(json.dumps(metadata, indent=2))
+        print(f"Model saved to {MODELS_DIR / 'visit_model.joblib'}")

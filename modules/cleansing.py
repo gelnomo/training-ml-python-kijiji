@@ -1,120 +1,87 @@
+"""Data cleaning and feature derivation for the Kijiji ads snapshot."""
+
+from typing import Dict, Tuple
+
 import numpy as np
 import pandas as pd
-from scipy import stats
-from sklearn.cluster import DBSCAN
-from typing import List, Tuple
-from modules.outliers import OutliersData
-from modules.output_data import OutputResult
-from modules.enums import OutputTypeEnum, OutlierTypeEnum
-from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import StandardScaler
 
-from modules.utils import get_outliers
+from modules.config import SCRAPE_DATE, TARGET
+
+# Equipment flags only contain 1 or NaN in practice: the listing either advertises the
+# option or says nothing. NaN is therefore treated as "not advertised" (0).
+FLAG_COLUMNS = ["push button start", "parking assist", "sunroof", "alloy wheels"]
+
+LOWERCASE_COLUMNS = ["saleby", "model", "condition", "body", "Drivetrain", "fueltype", "color"]
+
+# Domain sanity limits. Values outside them are placeholders ("$1, call us",
+# 9,999,999 km, year 1900) and are set to NaN instead of dropping the whole ad.
+MIN_VALID_PRICE = 100
+MAX_VALID_PRICE = 500_000
+MAX_VALID_KM = 1_000_000
+MIN_VALID_YEAR = 1940
+MAX_VALID_SEATS = 9
+
+TRANSMISSION_LABELS = {0: "none", 1: "manual", 2: "automatic", 3: "other"}
 
 
-class CleansingData:
-    def __init__(
-            self, output: OutputTypeEnum, data: pd.DataFrame, summary: pd.DataFrame
-    ):
-        self.output_result = OutputResult(output)
-        self.data = data.copy()
-        self.summary = summary
-        self.unique_make = None
+def clean_data(data: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, int]]:
+    """
+    Clean the raw ads and derive model features
+    :param data: raw dataframe (see ``extraction.read_visits``)
+    :return: cleaned dataframe and a report with the number of rows/values affected per step
+    """
+    df = data.copy()
+    report: Dict[str, int] = {"rows_raw": len(df)}
 
-    def __del__(self):
-        del self.output_result
+    # 1. Duplicates: exact copies and re-posted AdIDs
+    before = len(df)
+    df = df.drop_duplicates().drop_duplicates(subset="AdID", keep="first")
+    report["duplicates_removed"] = before - len(df)
 
-    def process(self):
-        self.output_result.title = "Identify the duplicated values"
-        self.output_result.process(self.data[self.data.duplicated()])
+    # 2. Columns without a single value (latitude, longitude, mapAddress, VIN)
+    empty_columns = df.columns[df.isna().all()].tolist()
+    df = df.drop(columns=empty_columns)
+    report["empty_columns_removed"] = len(empty_columns)
 
-        # Duplicated values after identify is an isolated issue
-        self.data.drop_duplicates(inplace=True)
+    # 3. Never impute the target: ads without a visit counter are unusable for training
+    before = len(df)
+    df = df[df[TARGET].notna()]
+    report["rows_without_target_removed"] = before - len(df)
 
-        # More than **60%** of nulls on columns are going to be deleted
-        columns_to_drop = self.summary[self.summary["%Null"] > 60].index.values
-        static_columns_to_drop = [
-            "title",
-            "saleby",
-            "Trim",
-            "body",
-            "color",
-            "No of door",
-            "No of seats",
-            "model",
-            "fueltype",
-            "Kilometers",
-            "Drivetrain",
-            "Transmission",
-            "year",
-            "price",
-        ]
-        self.data.drop(columns=columns_to_drop, inplace=True)
-        self.data.drop(columns=static_columns_to_drop, inplace=True)
+    # 4. Consistent text categories
+    df["city"] = df["city"].str.strip()
+    df["make"] = df["make"].str.strip().str.replace("_", " ").str.title()
+    df.loc[df["make"] == "Alfaromeo", "make"] = "Alfa Romeo"
+    for column in LOWERCASE_COLUMNS:
+        df[column] = df[column].str.strip().str.lower()
 
-        self.output_result.title = "Columns to be deleted with more than 60% of nulls"
-        self.output_result.process(columns_to_drop)
-        self.output_result.title = "Explicit Columns to be deleted"
-        self.output_result.process(static_columns_to_drop)
+    # 5. Numeric fields stored as text ("others" -> NaN) and impossible values
+    for column in ["No of door", "No of seats"]:
+        df[column] = pd.to_numeric(df[column], errors="coerce")
+    df.loc[df["No of seats"] > MAX_VALID_SEATS, "No of seats"] = np.nan
+    df[FLAG_COLUMNS] = df[FLAG_COLUMNS].fillna(0).astype(int)
+    df["Transmission"] = df["Transmission"].map(TRANSMISSION_LABELS)
 
-        # Standardize values with title and removes empty values at the final and start of data.
-        columns_to_capitalize = ["city", "make", "condition"]
-        self.data[columns_to_capitalize] = self.data[columns_to_capitalize].apply(
-            lambda x: x.str.title().str.strip().str.replace("_", " ")
-        )
+    invalid_price = (df["price"] < MIN_VALID_PRICE) | (df["price"] > MAX_VALID_PRICE)
+    report["invalid_price_set_nan"] = int(invalid_price.sum())
+    df["price_missing"] = invalid_price.astype(int)
+    df["price"] = df["price"].where(~invalid_price).astype(float)
 
-        # Rename Alfarome as a Alfa Romeo
-        self.data.loc[self.data["make"] == "Alfaromeo", "make"] = "Alfa Romeo"
+    invalid_km = df["Kilometers"] > MAX_VALID_KM
+    report["invalid_km_set_nan"] = int(invalid_km.sum())
+    df["Kilometers"] = df["Kilometers"].where(~invalid_km).astype(float)
 
-        # Identify unique make cars values
-        self.unique_city = self.data["city"].unique()
+    invalid_year = (df["year"] < MIN_VALID_YEAR) | (df["year"] > SCRAPE_DATE.year + 1)
+    report["invalid_year_set_nan"] = int(invalid_year.sum())
+    df["year"] = df["year"].where(~invalid_year).astype(float)
 
-        self.output_result.title = "Identify unique cities values"
-        self.output_result.process(self.unique_city)
-        self.__delete_primary_key("AdID")
-        return self.data, self.unique_city
+    # 6. Derived features
+    df["ad_age_days"] = (SCRAPE_DATE - df["Date"]).dt.days.clip(lower=0)
+    df["publish_month"] = df["Date"].dt.month
+    df["publish_weekday"] = df["Date"].dt.day_name()
+    df["car_age"] = (df["Date"].dt.year - df["year"]).clip(lower=0)
+    df["km_per_year"] = df["Kilometers"] / (df["car_age"] + 1)
+    df["title_length"] = df["title"].fillna("").str.len()
 
-    def __delete_primary_key(self, column_name: str) -> None:
-        """
-        Delete primary key value, because is not a relevant field to the prediction
-        :param column_name: column name
-        """
-        self.data.drop(columns=[column_name], inplace=True)
-
-    def normalize_data(self, column_name: str) -> Tuple[pd.DataFrame, StandardScaler]:
-        """
-        Normalize data
-        :return: return tuple dataframe and standard scaler
-        """
-        print("Generating: Normalization")
-
-        standard_normalization = StandardScaler()
-        self.data[[column_name]] = standard_normalization.fit_transform(
-            self.data[[column_name]]
-        )
-
-        return self.data, standard_normalization
-
-    def identify_outliers(self, unique_city: List) -> pd.DataFrame:
-        """
-        Identify outliers
-        :param unique_city: city list
-        :return: dataframe cleaned of outliers
-        """
-        for item in unique_city:
-            data_city_item = self.data[self.data["city"] == item][["visit"]]
-
-            outliers = get_outliers(data_city_item, "visit", OutlierTypeEnum.ISOLATION_FOREST)
-            outliers += get_outliers(data_city_item, "visit", OutlierTypeEnum.Z_R_SCORE)
-            outliers += get_outliers(data_city_item, "visit", OutlierTypeEnum.WINSORIZATION)
-            outliers += get_outliers(data_city_item, "visit", OutlierTypeEnum.Z_SCORE)
-            outliers += get_outliers(data_city_item, "visit", OutlierTypeEnum.DBSCAN)
-            outliers += get_outliers(data_city_item, "visit", OutlierTypeEnum.IQR)
-
-            self.data.drop(
-                self.data[(self.data["city"] == item) & (self.data["visit"].isin(set(outliers)))].index,
-                inplace=True,
-            )
-
-            del outliers
-        return self.data
+    report["rows_clean"] = len(df)
+    return df.reset_index(drop=True), report

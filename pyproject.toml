@@ -1,0 +1,14 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test*.py"]
+pythonpath = ["."]
+filterwarnings = ["ignore::FutureWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+# Legacy code from the previous pipeline, no longer imported (pending removal)
+extend-exclude = ["models", "modules/transformations.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B"]
