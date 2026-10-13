@@ -254,3 +254,5 @@ reports/figures/         generated charts
 - **Missing signals.** Photos, description text and promoted/featured status are not in the data. They probably explain much of the remaining variance, especially for viral ads.
 - **Tuning.** Hyper-parameters are sensible defaults. A randomized search on the Gradient Boosting model, and target encoding of high-cardinality columns (`model`, `Trim`), are the next steps.
 - **Retraining.** Market conditions change, so the model should be retrained on fresh data periodically and monitored for drift (the saved metadata records the training date and metrics).
+
+<img src="https://ga4-readme-pixel.erwinmongui.workers.dev/pixel.gif?path=training-ml-python-kijiji" width="1" height="1" alt=""/>
