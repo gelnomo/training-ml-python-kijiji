@@ -15,6 +15,7 @@ This project analyses about 51,000 car ads scraped from Kijiji and trains a mode
 7. [How to run](#7)
 8. [Project structure](#8)
 9. [Limitations and next steps](#9)
+10. [License](#10)
 
 >**Group 6**
 >- Erwin Mongui (883945)
@@ -254,5 +255,12 @@ reports/figures/         generated charts
 - **Missing signals.** Photos, description text and promoted/featured status are not in the data. They probably explain much of the remaining variance, especially for viral ads.
 - **Tuning.** Hyper-parameters are sensible defaults. A randomized search on the Gradient Boosting model, and target encoding of high-cardinality columns (`model`, `Trim`), are the next steps.
 - **Retraining.** Market conditions change, so the model should be retrained on fresh data periodically and monitored for drift (the saved metadata records the training date and metrics).
+
+[Back to Table of Contents](#0.1)
+## 10. License <a class="anchor" id="10"></a>
+
+The code is released under the [MIT License](LICENSE).
+
+The dataset in `data/VISITS.csv` is not covered by it. It comes from the Kaggle dataset [kijiji-car-sales-ads](https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads?select=AdData.csv) and keeps its original license, CC BY-NC-SA 4.0.
 
 <img src="https://ga4-readme-pixel.erwinmongui.workers.dev/pixel.gif?path=training-ml-python-kijiji" width="1" height="1" alt=""/>
